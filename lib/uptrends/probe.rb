@@ -2,12 +2,13 @@ require 'json'
 
 module Uptrends
   class Probe
-    attr_reader   :guid, :original_hash, :original_keys
+    attr_reader   :guid, :original_hash, :original_keys, :attributes
     attr_accessor :name, :url, :port, :checkfrequency, :probetype, :isactive, :generatealert, :notes, :performancelimit1, :performancelimit2, :erroronlimit1, :erroronlimit2, :minbytes, :erroronminbytes, :timeout, :tcpconnecttimeout, :matchpattern, :dnslookupmode, :useragent, :username, :password, :iscompetitor, :checkpoints, :httpmethod, :postdata
 
     def initialize(probe_hash = {})
       @original_hash     = probe_hash
       @original_keys     = probe_hash.keys
+      @attributes        = probe_hash.keys.map{|x| x.downcase.to_sym }
 
       @guid              = probe_hash["Guid"] ? probe_hash["Guid"] : nil
       @name              = probe_hash["Name"]
