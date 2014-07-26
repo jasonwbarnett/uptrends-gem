@@ -67,7 +67,8 @@ describe Uptrends::ApiClient do
 
     describe "GET Probes" do
       before do
-        VCR.insert_cassette('GET Probes', :record => :new_episodes)
+        VCR.insert_cassette('GET Probes', :record => :new_episodes, match_requests_on: [:method, :body, :headers, :query])
+        #Did you mean one of :method, :uri, :body, :headers, :host, :path, :query, :body_as_json?
       end
 
       after do
@@ -83,8 +84,9 @@ describe Uptrends::ApiClient do
       end
 
       it "should return an array of Uptrends::Probe objects" do
-        probes = uac.get_probes
+        probes = uac.probes
         probes.each do |probe|
+          #puts probe.class
           probe.class.must_equal Uptrends::Probe
         end
       end
