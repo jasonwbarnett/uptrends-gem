@@ -9,8 +9,8 @@ module Uptrends
     attr_reader :username
 
     def initialize(options = {})
-      @username = options[:username] ? options[:username] : fail("You must specify a username.")
-      @password = options[:password] ? options[:password] : fail("You must specify a password.")
+      @username = options[:username] ? options[:username] : fail("You must specify the :username option")
+      @password = options[:password] ? options[:password] : fail("You must specify the :password option")
     end
   end
 end
