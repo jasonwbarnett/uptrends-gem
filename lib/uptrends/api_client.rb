@@ -36,5 +36,28 @@ module Uptrends
     def update_probe(probe)
       self.class.put("/probes/#{probe.guid}", body: probe.gen_request_body)
     end
+
+    def create_http_probe(options = {}) #url, match_pattern = nil)
+      base_hash = {"Name"=>"", "URL"=>"", "CheckFrequency"=>5, "IsActive"=>true, "GenerateAlert"=>true, "Notes"=>"", "PerformanceLimit1"=>60000, "PerformanceLimit2"=>60000, "ErrorOnLimit1"=>false, "ErrorOnLimit2"=>false, "MinBytes"=>0, "ErrorOnMinBytes"=>false, "Timeout"=>30000, "TcpConnectTimeout"=>10000, "MatchPattern"=>"", "DnsLookupMode"=>"Local", "UserAgent"=>"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1;)", "UserName"=>"", "Password"=>"", "IsCompetitor"=>false, "Checkpoints"=>"", "HttpMethod"=>"Get", "PostData"=>""}
+
+      name          = options[:name]          ? options[:name]          : fail("You must provide a name!")
+      url           = options[:url]           ? options[:url]           : fail("You must provide a URL!")
+      match_pattern = options[:match_pattern] ? options[:match_pattern] : nil
+
+      if url =~ %r{^https:}i
+        base_hash.merge!({"Name"=>name, "URL"=>url, "ProbeType"=>"Https", "Port"=>443})
+      elsif url =~ %r{^http:}i
+        base_hash.merge!({"Name"=>name, "URL"=>url, "ProbeType"=>"Http", "Port"=>80})
+      else
+        fail("The URL you provided didn't start with http or https!")
+      end
+
+      base_hash.merge!({"MatchPattern"=>match_pattern}) unless match_pattern.nil?
+
+      p = Uptrends::Probe.new(base_hash)
+      self.class.post("/probes", body: p.gen_request_body)
+    end
+
+
   end
 end
