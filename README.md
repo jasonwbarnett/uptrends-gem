@@ -45,14 +45,18 @@ Let's select the first one and look at it's attributes
 
 If you wanted to update the probe, all you need to do is change it's attributes and then update, e.g.
 
-    # Let's change the name of the probe.
+    # Let's change the name of the probe:
 
     p.name = "My Probe's NEW name"
-    u.update_probe(p)
+    #  => "My Probe's NEW name"
+    response = u.update_probe(p)
+    #  => #<HTTParty::Response:0x10 parsed_response=nil, @response=#<Net::HTTPOK 200 OK readbody=true>, @headers={"cache-control"=>["private"], "server"=>["Microsoft-IIS/7.5"], "x-servername"=>["OBI"], "x-aspnet-version"=>["4.0.30319"], "x-powered-by"=>["ASP.NET"], "x-server"=>["OBI"], "date"=>["Sat, 26 Jul 2014 20:21:00 GMT"], "connection"=>["close"], "content-length"=>["0"]}>
+    response.response
+    #  => #<Net::HTTPOK 200 OK readbody=true>
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/uptrends/fork )
+1. Fork it ( https://github.com/jasonwbarnett/uptrends-gem/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
