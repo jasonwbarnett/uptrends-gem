@@ -67,7 +67,7 @@ describe Uptrends::ApiClient do
 
     describe "GET Probes" do
       before do
-        VCR.insert_cassette('GET Probes', :record => :new_episodes, match_requests_on: [:method, :body, :headers, :query])
+        VCR.insert_cassette('GET Probes', :record => :new_episodes, match_requests_on: [:method, :body, :headers, :query, :path])
         #Did you mean one of :method, :uri, :body, :headers, :host, :path, :query, :body_as_json?
       end
 
