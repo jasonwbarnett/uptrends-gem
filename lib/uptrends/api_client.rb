@@ -37,6 +37,13 @@ module Uptrends
       self.class.put("/probes/#{probe.guid}", body: probe.gen_request_body)
     end
 
+    def delete_probe(probe)
+      self.class.delete("/probes/#{probe.guid}")
+
+      @probes ||= get_probes
+      @probes.delete_if { |x| x.guid == probe.guid }
+    end
+
     def create_http_probe(options = {}) #url, match_pattern = nil)
       base_hash = {"Name"=>"", "URL"=>"", "CheckFrequency"=>5, "IsActive"=>true, "GenerateAlert"=>true, "Notes"=>"", "PerformanceLimit1"=>60000, "PerformanceLimit2"=>60000, "ErrorOnLimit1"=>false, "ErrorOnLimit2"=>false, "MinBytes"=>0, "ErrorOnMinBytes"=>false, "Timeout"=>30000, "TcpConnectTimeout"=>10000, "MatchPattern"=>"", "DnsLookupMode"=>"Local", "UserAgent"=>"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1;)", "UserName"=>"", "Password"=>"", "IsCompetitor"=>false, "Checkpoints"=>"", "HttpMethod"=>"Get", "PostData"=>""}
 
@@ -55,7 +62,11 @@ module Uptrends
       base_hash.merge!({"MatchPattern"=>match_pattern}) unless match_pattern.nil?
 
       p = Uptrends::Probe.new(base_hash)
-      self.class.post("/probes", body: p.gen_request_body)
+      response = self.class.post("/probes", body: p.gen_request_body)
+      new_probe = Uptrends::Probe.new(response.parsed_response)
+
+      @probes ||= get_probes
+      @probes << new_probe
     end
 
 
