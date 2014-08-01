@@ -42,6 +42,21 @@ module Uptrends
       end
     end
 
+    def add_probe_to_group(options = {})
+      probe = options[:probe]
+      group = options[:group]
+
+      fail("You must pass a probe and probe group using probe: and group: options") unless Uptrends::Probe === probe && Uptrends::ProbeGroup === group
+
+      probe_guid = options[:probe].guid ? options[:probe].guid : fail("The probe you passed does not have a guid.")
+      group_guid = options[:group].guid ? options[:group].guid : fail("The probe group you passed does not have a guid.")
+
+
+      post_body = JSON.dump({"ProbeGuid" => probe_guid})
+      puts "post_body: #{post_body}"
+      self.class.post("/probegroups/#{group_guid}/members", body: post_body)
+    end
+
     def update_probe(probe)
       self.class.put("/probes/#{probe.guid}", body: probe.gen_request_body)
     end
