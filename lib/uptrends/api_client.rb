@@ -1,5 +1,6 @@
 require "httparty"
 require "uptrends/probe"
+require "uptrends/probe_group"
 
 module Uptrends
   class ApiClient
@@ -29,6 +30,14 @@ module Uptrends
       parsed_response = self.class.get('/probes').parsed_response
       @probes = parsed_response.inject([]) do |memo, x|
         memo << Uptrends::Probe.new(x)
+        memo
+      end
+    end
+
+    def get_probe_groups
+      parsed_response = self.class.get('/probegroups').parsed_response
+      @probes = parsed_response.inject([]) do |memo, x|
+        memo << Uptrends::ProbeGroup.new(x)
         memo
       end
     end
