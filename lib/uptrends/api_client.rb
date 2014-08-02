@@ -48,6 +48,18 @@ module Uptrends
     end
 
     public
+    def get_probe_group_members(options = {})
+      group = options[:group]
+      fail("You must pass a probe group using group: option.") unless Uptrends::ProbeGroup === group
+      group_guid = options[:group].guid ? options[:group].guid : fail("The probe group you passed does not have a guid.")
+
+      parsed_response = self.class.get("/probegroups/#{group_guid}/members").parsed_response
+      probe_group_members = parsed_response.inject([]) do |memo, x|
+        memo << Uptrends::Probe.new(x)
+        memo
+      end
+    end
+
     def add_probe_to_group(options = {})
       probe = options[:probe]
       group = options[:group]
