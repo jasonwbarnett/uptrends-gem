@@ -26,6 +26,10 @@ module Uptrends
       @probes ||= get_probes
     end
 
+    def probe_groups
+      @probe_groups ||= get_probe_groups
+    end
+
     def get_probes
       parsed_response = self.class.get('/probes').parsed_response
       @probes = parsed_response.inject([]) do |memo, x|
@@ -53,7 +57,6 @@ module Uptrends
 
 
       post_body = JSON.dump({"ProbeGuid" => probe_guid})
-      puts "post_body: #{post_body}"
       self.class.post("/probegroups/#{group_guid}/members", body: post_body)
     end
 
