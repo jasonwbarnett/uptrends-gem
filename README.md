@@ -24,15 +24,20 @@ First initialize an instance of the API Client and then we play with it:
     u = Uptrends::ApiClient.new(username: 'my@email.com', password: 'MyP@sswo0rd')
     #  => #<Uptrends::ApiClient:0x00000101309e48 @username="my@email.com">
 
-Then you can query your account for all probes:
+Query your account for all probes:
 
     probes = u.probes # Returns an array of probes
-    #  => [#<Uptrends::Probe:0x0000010336cac8...>, #<Uptrends::Probe:0x0000010336cac9...>, ... ]
+    #  => [#<Uptrends::Probe:0x0000010336cac8 ...>, #<Uptrends::Probe:0x0000010336cac9 ...>, ... ]
 
-Let's select the first one and look at it's attributes
+Query your account for all probe __groups__:
+
+    probe_groups = u.probe_groups # Returns an array of probe groups
+    #  => [#<Uptrends::ProbeGroup:0x000001021594f8 ...>, #<Uptrends::ProbeGroup:0x000001021592f0 ...>, ... ]
+
+Let's select the first probe and look at it's attributes
 
     p = probes.first
-    #  => #<Uptrends::Probe:0x0000010336cac8...>
+    #  => #<Uptrends::Probe:0x0000010336cac8 ...>
 
     p.attributes
     #  => [:guid, :name, :url, :port, :checkfrequency, :probetype, :isactive, :generatealert, :notes, :performancelimit1, :performancelimit2, :erroronlimit1, :erroronlimit2, :minbytes, :erroronminbytes, :timeout, :tcpconnecttimeout, :matchpattern, :dnslookupmode, :useragent, :username, :password, :iscompetitor, :checkpoints, :httpmethod, :postdata]
@@ -43,7 +48,21 @@ Let's select the first one and look at it's attributes
     p.name
     #  => "My Probe's Name"
 
-If you wanted to update the probe, all you need to do is change it's attributes and then update, e.g.
+Let's select the first probe __group__ and look at it's attributes
+
+    pg = probe_groups.first
+    #  => #<Uptrends::ProbeGroup:0x000001021594f8 ...>
+
+    pg.attributes
+    #  => [:guid, :name, :isall, :isclientprobegroup]
+
+    pg.guid
+    #  => "c8d6a0f704494c37823850f3d4fd4273"
+
+    pg.name
+    #  => "All probes"
+
+If you wanted to update the probe, all you need to do is change as many attributes as you want and then update, e.g.
 
     # Let's change the name of the probe:
 
@@ -53,6 +72,12 @@ If you wanted to update the probe, all you need to do is change it's attributes 
     #  => #<HTTParty::Response:0x10 parsed_response=nil, @response=#<Net::HTTPOK 200 OK readbody=true>, @headers={"cache-control"=>["private"], "server"=>["Microsoft-IIS/7.5"], "x-servername"=>["OBI"], "x-aspnet-version"=>["4.0.30319"], "x-powered-by"=>["ASP.NET"], "x-server"=>["OBI"], "date"=>["Sat, 26 Jul 2014 20:21:00 GMT"], "connection"=>["close"], "content-length"=>["0"]}>
     response.response
     #  => #<Net::HTTPOK 200 OK readbody=true>
+
+Let's add our probe to a probe group
+
+    response = u.add_probe_to_group(probe: p, group: pg)
+    response.response
+    #  => #<Net::HTTPCreated 201 Created readbody=true>
 
 ## Contributing
 
