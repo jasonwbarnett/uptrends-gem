@@ -23,16 +23,17 @@ module Uptrends
     end
 
     def probes
-      @probes ||= get_probes
+      @_probes ||= get_probes
     end
 
     def probe_groups
-      @probe_groups ||= get_probe_groups
+      @_probe_groups ||= get_probe_groups
     end
 
+    private
     def get_probes
       parsed_response = self.class.get('/probes').parsed_response
-      @probes = parsed_response.inject([]) do |memo, x|
+      probes = parsed_response.inject([]) do |memo, x|
         memo << Uptrends::Probe.new(x)
         memo
       end
@@ -40,17 +41,18 @@ module Uptrends
 
     def get_probe_groups
       parsed_response = self.class.get('/probegroups').parsed_response
-      @probes = parsed_response.inject([]) do |memo, x|
+      probe_groups = parsed_response.inject([]) do |memo, x|
         memo << Uptrends::ProbeGroup.new(x)
         memo
       end
     end
 
+    public
     def add_probe_to_group(options = {})
       probe = options[:probe]
       group = options[:group]
 
-      fail("You must pass a probe and probe group using probe: and group: options") unless Uptrends::Probe === probe && Uptrends::ProbeGroup === group
+      fail("You must pass a probe and probe group using probe: and group: options.") unless Uptrends::Probe === probe && Uptrends::ProbeGroup === group
 
       probe_guid = options[:probe].guid ? options[:probe].guid : fail("The probe you passed does not have a guid.")
       group_guid = options[:group].guid ? options[:group].guid : fail("The probe group you passed does not have a guid.")
