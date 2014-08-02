@@ -23,11 +23,11 @@ module Uptrends
     end
 
     def probes
-      @_probes ||= get_probes
+      @probes ||= get_probes
     end
 
     def probe_groups
-      @_probe_groups ||= get_probe_groups
+      @probe_groups ||= get_probe_groups
     end
 
     private
