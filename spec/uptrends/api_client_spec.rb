@@ -1,15 +1,15 @@
 require_relative '../spec_helper'
 
 describe Uptrends::ApiClient do
-  let(:username) { ENV['uptrends_username'] }
-  let(:password) { ENV['uptrends_password'] }
+  let(:username) { ENV['UPTRENDS_USERNAME'] }
+  let(:password) { ENV['UPTRENDS_PASSWORD'] }
 
   describe "Setting up testing" do
-    it "should have a username defined in an env varible: uptrends_username" do
+    it "should have a username defined in an env varible: UPTRENDS_USERNAME" do
       username.wont_be_nil
     end
 
-    it "should have a password defined in an env varible: uptrends_password" do
+    it "should have a password defined in an env varible: UPTRENDS_PASSWORD" do
       password.wont_be_nil
     end
   end
