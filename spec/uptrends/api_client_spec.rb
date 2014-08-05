@@ -76,7 +76,7 @@ describe Uptrends::ApiClient do
       end
 
       it "must has a #get_probes method" do
-        uac.must_respond_to :get_probes
+        uac.wont_respond_to :get_probes
       end
 
       it "must have a #probes method" do

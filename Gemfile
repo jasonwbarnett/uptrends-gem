@@ -9,4 +9,5 @@ group :test do
   gem 'webmock'
   gem 'vcr'
   gem 'rake'
+  gem "codeclimate-test-reporter", require: nil
 end
