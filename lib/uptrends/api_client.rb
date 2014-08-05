@@ -116,6 +116,5 @@ module Uptrends
       base_hash
     end
 
-
   end
 end
