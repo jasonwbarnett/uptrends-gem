@@ -1,4 +1,5 @@
 require 'json'
+require 'uptrends/utils'
 
 module Uptrends
   class Probe
@@ -45,12 +46,7 @@ module Uptrends
     alias :type :probetype
 
     def to_s
-      string = []
-      original_keys.each do |key|
-        string << "#{key}: #{self.send(key.downcase.to_sym)}"
-      end
-
-      "#{string.join("\n")}"
+      Uptrends::Utils.to_s(self)
     end
 
   end
