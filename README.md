@@ -1,5 +1,7 @@
 # Uptrends
 
+[![Code Climate](https://codeclimate.com/github/jasonwbarnett/uptrends-gem/badges/gpa.svg)](https://codeclimate.com/github/jasonwbarnett/uptrends-gem)
+
 This is a ruby wrapper around the [Uptrends API][2]. Uptrends is a monitoring service that let's you monitor Web pages, Web services, Mail servers, Database servers, DNS, SSL certificates, FTP and more.
 
 ## Installation
