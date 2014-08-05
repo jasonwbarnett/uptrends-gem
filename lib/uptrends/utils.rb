@@ -1,4 +1,5 @@
 require 'json'
+require 'active_support/inflector'
 
 module Uptrends
   class Utils
@@ -17,8 +18,8 @@ module Uptrends
 
     def self.to_s(object)
       string = []
-      object.original_keys.each do |key|
-        string << "#{key}: #{object.send(key.downcase.to_sym)}"
+      object.attributes.each do |attr|
+        string << "#{attr}: #{object.send(attr)}"
       end
 
       "#{string.join("\n")}"
@@ -26,6 +27,7 @@ module Uptrends
 
     # This method sets up all of our attr_accessor so we can easily edit probe attributes
     def self.gen_and_set_accessors(object)
+      attributes = []
       object.original_hash.each_pair do |k,v|
 
         k = k.underscore
@@ -37,8 +39,10 @@ module Uptrends
           object.class.send(:attr_accessor, k)
           object.send("#{k}=", v)
         end
+        attributes << k
 
       end
+      object.instance_variable_set(:@attributes, attributes)
     end
 
   end
