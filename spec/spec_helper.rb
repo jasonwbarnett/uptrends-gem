@@ -13,3 +13,11 @@ VCR.configure do |c|
   c.hook_into :webmock
   c.ignore_hosts 'codeclimate.com'
 end
+
+@username = ENV['UPTRENDS_USERNAME']
+@password = ENV['UPTRENDS_PASSWORD']
+
+if @username.nil? || @password.nil?
+  $stderr.puts "You must define UPTRENDS_USERNAME and UPTRENDS_PASSWORD as environment variables, exiting..."
+  exit 1
+end
