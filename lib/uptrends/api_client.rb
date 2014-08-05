@@ -1,6 +1,7 @@
 require "httparty"
 require "uptrends/probe"
 require "uptrends/probe_group"
+require "uptrends/utils"
 
 module Uptrends
   class ApiClient
@@ -75,7 +76,7 @@ module Uptrends
     end
 
     def update_probe(probe)
-      self.class.put("/probes/#{probe.guid}", body: probe.gen_request_body)
+      self.class.put("/probes/#{probe.guid}", body: Uptrends::Utils.gen_request_body(probe))
     end
 
     def delete_probe(probe)
@@ -102,8 +103,8 @@ module Uptrends
 
       base_hash.merge!({"MatchPattern"=>match_pattern}) unless match_pattern.nil?
 
-      p = Uptrends::Probe.new(base_hash)
-      response = self.class.post("/probes", body: p.gen_request_body)
+      probe = Uptrends::Probe.new(base_hash)
+      response = self.class.post("/probes", body: Uptrends::Utils.gen_request_body(probe))
       new_probe = Uptrends::Probe.new(response.parsed_response)
 
       @probes ||= get_probes

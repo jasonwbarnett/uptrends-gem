@@ -44,19 +44,6 @@ module Uptrends
     alias :probetype= :probetype=
     alias :type :probetype
 
-    def gen_request_body
-      new_hash = original_keys.inject({}) do |memo,key|
-        if key == 'Guid'
-          memo
-        else
-          memo[key] = self.send(key.downcase.to_sym)
-          memo
-        end
-      end
-
-      request_body = JSON.dump(new_hash)
-    end
-
     def to_s
       string = []
       original_keys.each do |key|
