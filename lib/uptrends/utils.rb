@@ -23,5 +23,24 @@ module Uptrends
 
       "#{string.join("\n")}"
     end
+
+    # This method sets up all of our attr_accessor so we can easily edit probe attributes
+    def self.gen_and_set_accessors(object)
+      object.original_hash.each_pair do |k,v|
+
+        k = k.underscore
+        case k
+        when "guid"
+          puts "entering guid"
+          object.class.send(:attr_reader, k)
+          object.instance_variable_set("@#{k}", v)
+        else
+          object.class.send(:attr_accessor, k)
+          object.send("#{k}=", v)
+        end
+
+      end
+    end
+
   end
 end
