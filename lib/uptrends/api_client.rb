@@ -87,11 +87,21 @@ module Uptrends
     end
 
     def create_http_probe(options = {})
-      base_hash = {"Name"=>"", "URL"=>"", "CheckFrequency"=>5, "IsActive"=>true, "GenerateAlert"=>true, "Notes"=>"", "PerformanceLimit1"=>60000, "PerformanceLimit2"=>60000, "ErrorOnLimit1"=>false, "ErrorOnLimit2"=>false, "MinBytes"=>0, "ErrorOnMinBytes"=>false, "Timeout"=>30000, "TcpConnectTimeout"=>10000, "MatchPattern"=>"", "DnsLookupMode"=>"Local", "UserAgent"=>"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1;)", "UserName"=>"", "Password"=>"", "IsCompetitor"=>false, "Checkpoints"=>"", "HttpMethod"=>"Get", "PostData"=>""}
+      name          = options[:name]          ? options[:name] : fail("You must provide a name!")
+      url           = options[:url]           ? options[:url]  : fail("You must provide a URL!")
+      match_pattern = options[:match_pattern]
 
-      name          = options[:name]          ? options[:name]          : fail("You must provide a name!")
-      url           = options[:url]           ? options[:url]           : fail("You must provide a URL!")
-      match_pattern = options[:match_pattern] ? options[:match_pattern] : nil
+      probe     = Uptrends::Probe.new(gen_new_probe_hash(name, url, match_pattern))
+      response  = self.class.post("/probes", body: Uptrends::Utils.gen_request_body(probe))
+      new_probe = Uptrends::Probe.new(response.parsed_response)
+
+      @probes ||= get_probes
+      @probes << new_probe
+    end
+
+    private
+    def gen_new_probe_hash(name, url, match_pattern = nil)
+      base_hash = {"Name"=>"", "URL"=>"", "CheckFrequency"=>5, "IsActive"=>true, "GenerateAlert"=>true, "Notes"=>"", "PerformanceLimit1"=>60000, "PerformanceLimit2"=>60000, "ErrorOnLimit1"=>false, "ErrorOnLimit2"=>false, "MinBytes"=>0, "ErrorOnMinBytes"=>false, "Timeout"=>30000, "TcpConnectTimeout"=>10000, "MatchPattern"=>"", "DnsLookupMode"=>"Local", "UserAgent"=>"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1;)", "UserName"=>"", "Password"=>"", "IsCompetitor"=>false, "Checkpoints"=>"", "HttpMethod"=>"Get", "PostData"=>""}
 
       if url =~ %r{^https:}i
         base_hash.merge!({"Name"=>name, "URL"=>url, "ProbeType"=>"Https", "Port"=>443})
@@ -103,12 +113,7 @@ module Uptrends
 
       base_hash.merge!({"MatchPattern"=>match_pattern}) unless match_pattern.nil?
 
-      probe = Uptrends::Probe.new(base_hash)
-      response = self.class.post("/probes", body: Uptrends::Utils.gen_request_body(probe))
-      new_probe = Uptrends::Probe.new(response.parsed_response)
-
-      @probes ||= get_probes
-      @probes << new_probe
+      base_hash
     end
 
 
