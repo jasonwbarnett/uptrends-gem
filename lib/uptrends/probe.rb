@@ -1,53 +1,41 @@
 require 'json'
 require 'uptrends/utils'
+require 'active_support/inflector'
 
 module Uptrends
   class Probe
-    attr_reader   :guid, :original_hash, :original_keys, :attributes
-    attr_accessor :name, :url, :port, :checkfrequency, :probetype, :isactive, :generatealert, :notes, :performancelimit1, :performancelimit2, :erroronlimit1, :erroronlimit2, :minbytes, :erroronminbytes, :timeout, :tcpconnecttimeout, :matchpattern, :dnslookupmode, :useragent, :username, :password, :iscompetitor, :checkpoints, :httpmethod, :postdata
+    attr_reader   :original_hash, :original_keys, :attributes
 
     def initialize(probe_hash = {})
       @original_hash     = probe_hash
       @original_keys     = probe_hash.keys
       @attributes        = probe_hash.keys.map{|x| x.downcase.to_sym }
 
-      @guid              = probe_hash["Guid"]
-      @name              = probe_hash["Name"]
-      @url               = probe_hash["URL"]
-      @port              = probe_hash["Port"]
-      @checkfrequency    = probe_hash["CheckFrequency"]
-      @probetype         = probe_hash["ProbeType"]
-      @isactive          = probe_hash["IsActive"]
-      @generatealert     = probe_hash["GenerateAlert"]
-      @notes             = probe_hash["Notes"]
-      @performancelimit1 = probe_hash["PerformanceLimit1"]
-      @performancelimit2 = probe_hash["PerformanceLimit2"]
-      @erroronlimit1     = probe_hash["ErrorOnLimit1"]
-      @erroronlimit2     = probe_hash["ErrorOnLimit2"]
-      @minbytes          = probe_hash["MinBytes"]
-      @erroronminbytes   = probe_hash["ErrorOnMinBytes"]
-      @timeout           = probe_hash["Timeout"]
-      @tcpconnecttimeout = probe_hash["TcpConnectTimeout"]
-      @matchpattern      = probe_hash["MatchPattern"]
-      @dnslookupmode     = probe_hash["DnsLookupMode"]
-      @useragent         = probe_hash["UserAgent"]
-      @username          = probe_hash["UserName"]
-      @password          = probe_hash["Password"]
-      @iscompetitor      = probe_hash["IsCompetitor"]
-      @checkpoints       = probe_hash["Checkpoints"]
-
-      if probetype =~ /Https?/
-        @httpmethod = probe_hash["HttpMethod"]
-        @postdata   = probe_hash["PostData"]
-      end
+      gen_and_set_accessors(probe_hash)
     end
-
-    alias :type= :probetype=
-    alias :type  :probetype
 
     def to_s
       Uptrends::Utils.to_s(self)
     end
+
+    private
+      # This method sets up all of our attr_accessor so we can easily edit probe attributes
+      def gen_and_set_accessors(hash)
+        hash.each_pair do |k,v|
+
+          k = k.underscore
+          case k
+          when "guid"
+            puts "entering guid"
+            self.class.send(:attr_reader, k)
+            instance_variable_set("@#{k}", v)
+          else
+            self.class.send(:attr_accessor, k)
+            self.send("#{k}=", v)
+          end
+
+        end
+      end
 
   end
 end
