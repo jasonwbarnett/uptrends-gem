@@ -33,17 +33,27 @@ module Uptrends
 
     private
     def get_probes
-      parsed_response = self.class.get('/probes').parsed_response
-      probes = parsed_response.inject([]) do |memo, x|
-        memo << Uptrends::Probe.new(x)
-        memo
-      end
+      get_all(Uptrends::Probe)
     end
 
     def get_probe_groups
-      parsed_response = self.class.get('/probegroups').parsed_response
-      probe_groups = parsed_response.inject([]) do |memo, x|
-        memo << Uptrends::ProbeGroup.new(x)
+      get_all(Uptrends::ProbeGroup)
+    end
+
+    def get_all(type)
+      case type.new
+      when Uptrends::ProbeGroup
+        uri = '/probegroups'
+      when Uptrends::Probe
+        uri = '/probes'
+      else
+        fail("You passed an unknown type. Try Uptrends::Probe or Uptrends::ProbeGroup")
+      end
+
+      parsed_response = self.class.get(uri).parsed_response
+
+      all = parsed_response.inject([]) do |memo, x|
+        memo << type.new(x)
         memo
       end
     end
