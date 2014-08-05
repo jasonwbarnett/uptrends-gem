@@ -36,14 +36,14 @@ module Uptrends
       @iscompetitor      = probe_hash["IsCompetitor"]
       @checkpoints       = probe_hash["Checkpoints"]
 
-      if probetype == "Http"
+      if probetype =~ /Https?/
         @httpmethod = probe_hash["HttpMethod"]
         @postdata   = probe_hash["PostData"]
       end
     end
 
-    alias :probetype= :probetype=
-    alias :type :probetype
+    alias :type= :probetype=
+    alias :type  :probetype
 
     def to_s
       Uptrends::Utils.to_s(self)
