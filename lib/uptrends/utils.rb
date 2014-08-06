@@ -4,11 +4,11 @@ require 'active_support/inflector'
 module Uptrends
   class Utils
     def self.gen_request_body(object)
-      new_hash = object.original_keys.inject({}) do |memo,key|
-        if key == 'Guid'
+      new_hash = object.original_hash.inject({}) do |memo,(k,v)|
+        if k == 'Guid'
           memo
         else
-          memo[key] = object.send(key.downcase.to_sym)
+          memo[k] = object.send(k.underscore)
           memo
         end
       end
