@@ -6,11 +6,11 @@ require 'uptrends/api_client'
 u = Uptrends::ApiClient.new(username: ENV['UPTRENDS_USERNAME'], password: ENV['UPTRENDS_PASSWORD'])
 
 u.probes.each do |x|
-  next if x.dnslookupmode == 'Local' && x.timeout == 20000 && x.tcpconnecttimeout == 5000
+  next if x.dns_lookup_mode == 'Local' && x.timeout == 20000 && x.tcp_connect_timeout == 5000
 
-  x.dnslookupmode = 'Local'
+  x.dns_lookup_mode = 'Local'
   x.timeout = 20000
-  x.tcpconnecttimeout = 5000
+  x.tcp_connect_timeout = 5000
 
   puts "Updating the \"#{x.name}\" probe now... "
   u.update_probe(x)
