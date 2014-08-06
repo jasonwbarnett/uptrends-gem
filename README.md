@@ -42,7 +42,7 @@ Let's select the first probe and look at it's attributes
     #  => #<Uptrends::Probe:0x0000010336cac8 ...>
 
     p.attributes
-    #  => [:guid, :name, :url, :port, :checkfrequency, :probetype, :isactive, :generatealert, :notes, :performancelimit1, :performancelimit2, :erroronlimit1, :erroronlimit2, :minbytes, :erroronminbytes, :timeout, :tcpconnecttimeout, :matchpattern, :dnslookupmode, :useragent, :username, :password, :iscompetitor, :checkpoints, :httpmethod, :postdata]
+    #  => [:guid, :name, :url, :port, :check_frequency, :probe_type, :is_active, :generate_alert, :notes, :performance_limit1, :performance_limit2, :error_on_limit1, :error_on_limit2, :min_bytes, :error_on_min_bytes, :timeout, :tcp_connect_timeout, :match_pattern, :dns_lookup_mode, :user_agent, :user_name, :password, :is_competitor, :checkpoints, :http_method, :post_data]
 
     p.guid
     #  => "7ef43a1b255949f5a052444348971690"
@@ -56,7 +56,7 @@ Let's select the first probe __group__ and look at it's attributes
     #  => #<Uptrends::ProbeGroup:0x000001021594f8 ...>
 
     pg.attributes
-    #  => [:guid, :name, :isall, :isclientprobegroup]
+    #  => [:guid, :name, :is_all, :is_client_probe_group]
 
     pg.guid
     #  => "c8d6a0f704494c37823850f3d4fd4273"

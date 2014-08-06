@@ -39,7 +39,7 @@ module Uptrends
           object.class.send(:attr_accessor, k)
           object.send("#{k}=", v)
         end
-        attributes << k
+        attributes << k.to_sym
 
       end
       object.instance_variable_set(:@attributes, attributes)
