@@ -107,6 +107,8 @@ module Uptrends
 
       @probes ||= get_probes
       @probes << new_probe
+
+      new_probe
     end
 
     private
