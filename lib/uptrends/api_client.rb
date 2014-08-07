@@ -86,7 +86,8 @@ module Uptrends
     end
 
     def update_probe(probe)
-      self.class.put("/probes/#{probe.guid}", body: Uptrends::Utils.gen_request_body(probe))
+      response = self.class.put("/probes/#{probe.guid}", body: Uptrends::Utils.gen_request_body(probe))
+      fail_or_return(response)
     end
 
     def delete_probe(probe)
@@ -103,12 +104,12 @@ module Uptrends
 
       probe     = Uptrends::Probe.new(gen_new_probe_hash(name, url, match_pattern))
       response  = self.class.post("/probes", body: Uptrends::Utils.gen_request_body(probe))
-      new_probe = Uptrends::Probe.new(response.parsed_response)
+      #new_probe = Uptrends::Probe.new(response.parsed_response)
 
-      @probes ||= get_probes
-      @probes << new_probe
+      #@probes ||= get_probes
+      #@probes << new_probe
 
-      new_probe
+      #new_probe
     end
 
     private
@@ -126,6 +127,26 @@ module Uptrends
       base_hash.merge!({"MatchPattern"=>match_pattern}) unless match_pattern.nil?
 
       base_hash
+    end
+
+    def fail_or_return(res)
+      res.response.code
+      case result.status
+        when 200...300
+          result
+        when 301, 302, 303, 307
+          request = generate_request(request.to_hash.merge({
+            :uri => result.headers['location'],
+            :api_method => nil
+          }))
+          raise RedirectError.new(result.headers['location'], result)
+        when 400...500
+          raise ClientError.new(result.error_message || "A client error has occurred", result)
+        when 500...600
+          raise ServerError.new(result.error_message || "A server error has occurred", result)
+        else
+          raise TransmissionError.new(result.error_message || "A transmission error has occurred", result)
+      end
     end
 
   end
