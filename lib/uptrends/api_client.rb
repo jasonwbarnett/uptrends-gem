@@ -2,6 +2,7 @@ require "httparty"
 require "uptrends/probe"
 require "uptrends/probe_group"
 require "uptrends/utils"
+require "uptrends/api_error"
 
 module Uptrends
   class ApiClient
@@ -50,8 +51,9 @@ module Uptrends
         fail("You passed an unknown type. Try Uptrends::Probe or Uptrends::ProbeGroup")
       end
 
-      parsed_response = self.class.get(uri).parsed_response
+      res = self.class.get(uri)
 
+      parsed_response = raise_or_return(res)
       all = parsed_response.inject([]) do |memo, x|
         memo << type.new(x)
         memo
@@ -64,7 +66,8 @@ module Uptrends
       fail("You must pass a probe group using group: option.") unless Uptrends::ProbeGroup === group
       group_guid = options[:group].guid ? options[:group].guid : fail("The probe group you passed does not have a guid.")
 
-      parsed_response = self.class.get("/probegroups/#{group_guid}/members").parsed_response
+      res = self.class.get("/probegroups/#{group_guid}/members")
+      parsed_response = raise_or_return(res)
       probe_group_members = parsed_response.inject([]) do |memo, x|
         memo << Uptrends::Probe.new(x)
         memo
@@ -82,16 +85,18 @@ module Uptrends
 
 
       post_body = JSON.dump({"ProbeGuid" => probe_guid})
-      self.class.post("/probegroups/#{group_guid}/members", body: post_body)
+      res = self.class.post("/probegroups/#{group_guid}/members", body: post_body)
+      raise_or_return(res)
     end
 
     def update_probe(probe)
-      response = self.class.put("/probes/#{probe.guid}", body: Uptrends::Utils.gen_request_body(probe))
-      fail_or_return(response)
+      res = self.class.put("/probes/#{probe.guid}", body: Uptrends::Utils.gen_request_body(probe))
+      raise_or_return(res)
     end
 
     def delete_probe(probe)
-      self.class.delete("/probes/#{probe.guid}")
+      res = self.class.delete("/probes/#{probe.guid}")
+      raise_or_return(res)
 
       @probes ||= get_probes
       @probes.delete_if { |x| x.guid == probe.guid }
@@ -103,13 +108,14 @@ module Uptrends
       match_pattern = options[:match_pattern]
 
       probe     = Uptrends::Probe.new(gen_new_probe_hash(name, url, match_pattern))
-      response  = self.class.post("/probes", body: Uptrends::Utils.gen_request_body(probe))
-      #new_probe = Uptrends::Probe.new(response.parsed_response)
+      res  = self.class.post("/probes", body: Uptrends::Utils.gen_request_body(probe))
+      parsed_response = raise_or_return(res)
+      new_probe = Uptrends::Probe.new(parsed_response)
 
-      #@probes ||= get_probes
-      #@probes << new_probe
+      @probes ||= get_probes
+      @probes << new_probe
 
-      #new_probe
+      new_probe
     end
 
     private
@@ -129,23 +135,13 @@ module Uptrends
       base_hash
     end
 
-    def fail_or_return(res)
-      res.response.code
-      case result.status
+    def raise_or_return(result)
+      response_code = result.response.code.to_i
+      case response_code
         when 200...300
-          result
-        when 301, 302, 303, 307
-          request = generate_request(request.to_hash.merge({
-            :uri => result.headers['location'],
-            :api_method => nil
-          }))
-          raise RedirectError.new(result.headers['location'], result)
-        when 400...500
-          raise ClientError.new(result.error_message || "A client error has occurred", result)
-        when 500...600
-          raise ServerError.new(result.error_message || "A server error has occurred", result)
+          result.parsed_response
         else
-          raise TransmissionError.new(result.error_message || "A transmission error has occurred", result)
+          raise Uptrends::ApiError.new(result.parsed_response)
       end
     end
 
