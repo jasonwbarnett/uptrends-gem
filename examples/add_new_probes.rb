@@ -43,19 +43,16 @@ probe_uri_array = u.probes.map do |x|
   parse_uri(x.url)
 end.compact
 
-# select our probe group that we want to also add our probes too
-linux_probe_group = u.probe_groups.select { |x| x.name =~ /Linux/}.first
-
 uri_array.each do |uri|
   url = "#{uri[0]}/User/Login"
   db  = uri[1]
+
+  # If URL contains certain things we don't want to add it Uptrends
   next if url =~ /\.xxx/i || url =~ /staging/i || url =~ /qa(languages)?[0-9gaspb]+(prod)?\./i
+  # If the URL already exists at Uptrends we don't want to add it again!
   next if probe_uri_array.include?(url)
 
   puts "Adding a \"#{url}\" probe"
   new_probe = u.create_http_probe(name: db, url: url, match_pattern: 'j_username')
-
-  puts "Adding \"#{url}\" to the \"#{linux_probe_group.name}\" group now... "
-  u.add_probe_to_group(probe: new_probe, group: linux_probe_group)
 end
 
