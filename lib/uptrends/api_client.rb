@@ -32,35 +32,6 @@ module Uptrends
       @probe_groups ||= get_probe_groups
     end
 
-    private
-    def get_probes
-      get_all(Uptrends::Probe)
-    end
-
-    def get_probe_groups
-      get_all(Uptrends::ProbeGroup)
-    end
-
-    def get_all(type)
-      case type.new
-      when Uptrends::ProbeGroup
-        uri = '/probegroups'
-      when Uptrends::Probe
-        uri = '/probes'
-      else
-        fail("You passed an unknown type. Try Uptrends::Probe or Uptrends::ProbeGroup")
-      end
-
-      res = self.class.get(uri)
-
-      parsed_response = raise_or_return(res)
-      all = parsed_response.inject([]) do |memo, x|
-        memo << type.new(x)
-        memo
-      end
-    end
-
-    public
     def get_probe_group_members(options = {})
       group = options[:group]
       fail("You must pass a probe group using group: option.") unless Uptrends::ProbeGroup === group
@@ -119,6 +90,33 @@ module Uptrends
     end
 
     private
+    def get_probes
+      get_all(Uptrends::Probe)
+    end
+
+    def get_probe_groups
+      get_all(Uptrends::ProbeGroup)
+    end
+
+    def get_all(type)
+      case type.new
+      when Uptrends::ProbeGroup
+        uri = '/probegroups'
+      when Uptrends::Probe
+        uri = '/probes'
+      else
+        fail("You passed an unknown type. Try Uptrends::Probe or Uptrends::ProbeGroup")
+      end
+
+      res = self.class.get(uri)
+
+      parsed_response = raise_or_return(res)
+      all = parsed_response.inject([]) do |memo, x|
+        memo << type.new(x)
+        memo
+      end
+    end
+
     def gen_new_probe_hash(name, url, match_pattern = nil)
       base_hash = {"Name"=>"", "URL"=>"", "CheckFrequency"=>5, "IsActive"=>true, "GenerateAlert"=>true, "Notes"=>"", "PerformanceLimit1"=>60000, "PerformanceLimit2"=>60000, "ErrorOnLimit1"=>false, "ErrorOnLimit2"=>false, "MinBytes"=>0, "ErrorOnMinBytes"=>false, "Timeout"=>30000, "TcpConnectTimeout"=>10000, "MatchPattern"=>"", "DnsLookupMode"=>"Local", "UserAgent"=>"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1;)", "UserName"=>"", "Password"=>"", "IsCompetitor"=>false, "Checkpoints"=>"", "HttpMethod"=>"Get", "PostData"=>""}
 
