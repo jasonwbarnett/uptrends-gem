@@ -33,9 +33,11 @@ module Uptrends
         k = k.underscore
         case k
         when "guid"
+          # setup attr_reader for guid and set it's value.
           object.class.send(:attr_reader, k)
           object.instance_variable_set("@#{k}", v)
         else
+          # setup a attr_accessor for all other attributes
           object.class.send(:attr_accessor, k)
           object.send("#{k}=", v)
         end
