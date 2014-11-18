@@ -1,7 +1,7 @@
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 require_relative '../lib/uptrends'
-require_relative '../lib/uptrends/api_client'
+require_relative '../lib/uptrends/client'
 require_relative '../lib/uptrends/probe'
 require_relative '../lib/uptrends/probe_group'
 require_relative '../lib/uptrends/utils'

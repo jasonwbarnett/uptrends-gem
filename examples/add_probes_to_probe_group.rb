@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
-require 'uptrends/api_client'
+require 'uptrends/client'
 
 (puts "You must set both the \"UPTRENDS_USERNAME\" and \"UPTRENDS_PASSWORD\" environment variables, exiting..."; exit 1;) unless ENV['UPTRENDS_USERNAME'] && ENV['UPTRENDS_PASSWORD']
 
-u = Uptrends::ApiClient.new(username: ENV['UPTRENDS_USERNAME'], password: ENV['UPTRENDS_PASSWORD'])
+u = Uptrends::Client.new(username: ENV['UPTRENDS_USERNAME'], password: ENV['UPTRENDS_PASSWORD'])
 
 # select our probe group by name
 linux_probe_group = u.probe_groups.select { |x| x.name =~ /Linux/}.first

@@ -22,9 +22,9 @@ Or install it yourself as:
 
 First initialize an instance of the API Client and then we play with it:
 
-    require 'uptrends/api_client'
-    u = Uptrends::ApiClient.new(username: 'my@email.com', password: 'MyP@sswo0rd')
-    #  => #<Uptrends::ApiClient:0x00000101309e48 @username="my@email.com">
+    require 'uptrends'
+    u = Uptrends::Client.new(username: 'my@email.com', password: 'MyP@sswo0rd')
+    #  => #<Uptrends::Client:0x00000101309e48 @username="my@email.com">
 
 Query your account for all probes:
 

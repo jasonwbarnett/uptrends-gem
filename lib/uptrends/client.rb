@@ -5,7 +5,7 @@ require "uptrends/utils"
 require "uptrends/api_error"
 
 module Uptrends
-  class ApiClient
+  class Client
     include HTTParty
     format :json
     base_uri('https://api.uptrends.com/v3')
