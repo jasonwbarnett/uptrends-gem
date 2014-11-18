@@ -12,9 +12,9 @@ module Uptrends
 
     attr_reader :username
 
-    def initialize(options = {})
-      @username = options[:username] ? options[:username] : fail("You must specify the :username option")
-      password  = options[:password] ? options[:password] : fail("You must specify the :password option")
+    def initialize(opts = {})
+      @username = opts[:username] ? opts[:username] : fail("You must specify the :username option")
+      password  = opts[:password] ? opts[:password] : fail("You must specify the :password option")
 
       # This makes it so that every request uses basic auth
       self.class.basic_auth(@username, password)
@@ -32,10 +32,10 @@ module Uptrends
       @probe_groups ||= get_probe_groups
     end
 
-    def get_probe_group_members(options = {})
-      group = options[:group]
+    def get_probe_group_members(opts = {})
+      group = opts[:group]
       fail("You must pass a probe group using group: option.") unless Uptrends::ProbeGroup === group
-      group_guid = options[:group].guid ? options[:group].guid : fail("The probe group you passed does not have a guid.")
+      group_guid = opts[:group].guid ? opts[:group].guid : fail("The probe group you passed does not have a guid.")
 
       res = self.class.get("/probegroups/#{group_guid}/members")
       parsed_response = raise_or_return(res)
@@ -45,14 +45,25 @@ module Uptrends
       end
     end
 
-    def add_probe_to_group(options = {})
-      probe = options[:probe]
-      group = options[:group]
+    def add_probe(opts = {})
+      probe = Uptrends::Probe.new(opts)
+      res  = self.class.post("/probes", body: Uptrends::Utils.gen_request_body(probe))
+      parsed_response = raise_or_return(res)
+      new_probe = Uptrends::Probe.new(parsed_response)
 
-      fail("You must pass a probe and probe group using probe: and group: options.") unless Uptrends::Probe === probe && Uptrends::ProbeGroup === group
+      probes << new_probe
 
-      probe_guid = options[:probe].guid ? options[:probe].guid : fail("The probe you passed does not have a guid.")
-      group_guid = options[:group].guid ? options[:group].guid : fail("The probe group you passed does not have a guid.")
+      new_probe
+    end
+
+    def add_probe_to_group(opts = {})
+      probe = opts[:probe]
+      group = opts[:group]
+
+      fail("You must pass a probe and probe group using probe: and group: opts.") unless Uptrends::Probe === probe && Uptrends::ProbeGroup === group
+
+      probe_guid = opts[:probe].guid ? opts[:probe].guid : fail("The probe you passed does not have a guid.")
+      group_guid = opts[:group].guid ? opts[:group].guid : fail("The probe group you passed does not have a guid.")
 
 
       post_body = JSON.dump({"ProbeGuid" => probe_guid})
@@ -73,18 +84,18 @@ module Uptrends
       @probes.delete_if { |x| x.guid == probe.guid }
     end
 
-    def create_http_probe(options = {})
-      name          = options[:name]          ? options[:name] : fail("You must provide a name!")
-      url           = options[:url]           ? options[:url]  : fail("You must provide a URL!")
-      match_pattern = options[:match_pattern]
+    def create_http_probe(opts = {})
+      name            = opts[:name]            ? opts[:name]            : fail("You must provide a name!")
+      url             = opts[:url]             ? opts[:url]             : fail("You must provide a URL!")
+      check_frequency = opts[:check_frequency] ? opts[:check_frequency] : 15
+      match_pattern   = opts[:match_pattern]
 
-      probe     = Uptrends::Probe.new(gen_new_probe_hash(name, url, match_pattern))
+      probe     = Uptrends::Probe.new(gen_new_probe_hash(name, url, check_frequency, match_pattern))
       res  = self.class.post("/probes", body: Uptrends::Utils.gen_request_body(probe))
       parsed_response = raise_or_return(res)
       new_probe = Uptrends::Probe.new(parsed_response)
 
-      @probes ||= get_probes
-      @probes << new_probe
+      probes << new_probe
 
       new_probe
     end
@@ -117,8 +128,8 @@ module Uptrends
       end
     end
 
-    def gen_new_probe_hash(name, url, match_pattern = nil)
-      base_hash = {"Name"=>"", "URL"=>"", "CheckFrequency"=>5, "IsActive"=>true, "GenerateAlert"=>true, "Notes"=>"", "PerformanceLimit1"=>60000, "PerformanceLimit2"=>60000, "ErrorOnLimit1"=>false, "ErrorOnLimit2"=>false, "MinBytes"=>0, "ErrorOnMinBytes"=>false, "Timeout"=>30000, "TcpConnectTimeout"=>10000, "MatchPattern"=>"", "DnsLookupMode"=>"Local", "UserAgent"=>"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1;)", "UserName"=>"", "Password"=>"", "IsCompetitor"=>false, "Checkpoints"=>"", "HttpMethod"=>"Get", "PostData"=>""}
+    def gen_new_probe_hash(name, url, check_frequency = 15, match_pattern = nil)
+      base_hash = {"Name"=>"", "URL"=>"", "CheckFrequency"=>check_frequency, "IsActive"=>true, "GenerateAlert"=>true, "Notes"=>"", "PerformanceLimit1"=>60000, "PerformanceLimit2"=>60000, "ErrorOnLimit1"=>false, "ErrorOnLimit2"=>false, "MinBytes"=>0, "ErrorOnMinBytes"=>false, "Timeout"=>30000, "TcpConnectTimeout"=>10000, "MatchPattern"=>"", "DnsLookupMode"=>"Local", "UserAgent"=>"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1;)", "UserName"=>"", "Password"=>"", "IsCompetitor"=>false, "Checkpoints"=>"", "HttpMethod"=>"Get", "PostData"=>""}
 
       if url =~ %r{^https:}i
         base_hash.merge!({"Name"=>name, "URL"=>url, "ProbeType"=>"Https", "Port"=>443})

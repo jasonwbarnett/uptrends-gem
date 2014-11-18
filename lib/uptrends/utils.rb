@@ -5,10 +5,10 @@ module Uptrends
   class Utils
     def self.gen_request_body(object)
       new_hash = object.original_hash.inject({}) do |memo,(k,v)|
-        if k == 'Guid'
+        if k.to_s.underscore == 'guid'
           memo
         else
-          memo[k] = object.send(k.underscore)
+          memo[k.to_s.camelize] = object.send(k.to_s.underscore)
           memo
         end
       end
@@ -30,7 +30,7 @@ module Uptrends
       attributes = []
       object.original_hash.each_pair do |k,v|
 
-        k = k.underscore
+        k = k.to_s.underscore
         case k
         when "guid"
           # setup attr_reader for guid and set it's value.
