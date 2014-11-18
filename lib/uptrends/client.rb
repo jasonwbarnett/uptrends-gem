@@ -24,8 +24,12 @@ module Uptrends
       self.class.headers({'Content-Type' => 'application/json', 'Accept' => 'application/json'})
     end
 
-    def probes
-      @probes ||= get_probes
+    def probes(opts = {})
+      if opts[:refresh]
+        @probes = get_probes
+      else
+        @probes ||= get_probes
+      end
     end
 
     def probe_groups
@@ -80,8 +84,7 @@ module Uptrends
       res = self.class.delete("/probes/#{probe.guid}")
       raise_or_return(res)
 
-      @probes ||= get_probes
-      @probes.delete_if { |x| x.guid == probe.guid }
+      probes.delete_if { |x| x.guid == probe.guid }
     end
 
     def create_http_probe(opts = {})
