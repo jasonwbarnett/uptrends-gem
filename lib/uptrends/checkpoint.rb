@@ -3,6 +3,6 @@ require 'uptrends/utils'
 require 'uptrends/base'
 
 module Uptrends
-  class ProbeGroup < Base
+  class Checkpoint < Base
   end
 end

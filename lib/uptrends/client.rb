@@ -1,6 +1,7 @@
 require "httparty"
 require "uptrends/probe"
 require "uptrends/probe_group"
+require "uptrends/checkpoint"
 require "uptrends/utils"
 require "uptrends/api_error"
 
@@ -29,6 +30,14 @@ module Uptrends
         @probes = get_probes
       else
         @probes ||= get_probes
+      end
+    end
+
+    def checkpoints(opts = {})
+      if opts[:refresh]
+        @checkpoints = get_checkpoints
+      else
+        @checkpoints ||= get_checkpoints
       end
     end
 
@@ -108,6 +117,10 @@ module Uptrends
       get_all(Uptrends::Probe)
     end
 
+    def get_checkpoints
+      get_all(Uptrends::Checkpoint)
+    end
+
     def get_probe_groups
       get_all(Uptrends::ProbeGroup)
     end
@@ -118,6 +131,8 @@ module Uptrends
         uri = '/probegroups'
       when Uptrends::Probe
         uri = '/probes'
+      when Uptrends::Checkpoint
+        uri = '/checkpointservers'
       else
         fail("You passed an unknown type. Try Uptrends::Probe or Uptrends::ProbeGroup")
       end
