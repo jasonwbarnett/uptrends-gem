@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require 'uptrends/client'
+require 'uptrends'
 
 (puts "You must set both the \"UPTRENDS_USERNAME\" and \"UPTRENDS_PASSWORD\" environment variables, exiting..."; exit 1;) unless ENV['UPTRENDS_USERNAME'] && ENV['UPTRENDS_PASSWORD']
 
