@@ -70,12 +70,12 @@ module Uptrends
       end
 
       if all
-        res = self.class.get(uri)
+        response = self.class.get(uri)
       elsif guid
-        res = self.class.get("#{uri}/#{guid}")
+        response = self.class.get("#{uri}/#{guid}")
       end
 
-      type.parse(self, res)
+      type.parse(self, response)
     end
 
   end
