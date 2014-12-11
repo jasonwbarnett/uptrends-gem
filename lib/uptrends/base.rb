@@ -4,7 +4,7 @@ require "json"
 module Uptrends
   class Base
 
-    attr_reader :attributes, :url
+    attr_reader :attributes, :api_url
 
     def initialize(client, response, attributes = {})
       @client     = client
@@ -21,11 +21,18 @@ module Uptrends
     end
 
     def create!
-      @client.class.post(url, body: gen_request_body)
+      response = @client.class.post(api_url, body: gen_request_body)
+      self.class.check_error!(response)
     end
 
     def update!
-      @client.class.put(url, body: gen_request_body)
+      response = @client.class.put("#{api_url}/#{guid}", body: gen_request_body)
+      self.class.check_error!(response)
+    end
+
+    def delete!
+      response = @client.class.delete("#{api_url}/#{guid}")
+      self.class.check_error!(response)
     end
 
     def self.check_error!(response)

@@ -13,5 +13,9 @@ module Uptrends
         new(client, response, probe)
       end
     end
+
+    def api_url
+      "/probes"
+    end
   end
 end
