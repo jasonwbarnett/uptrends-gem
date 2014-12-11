@@ -4,13 +4,11 @@ module Uptrends
   class ProbeGroup < Base
 
     def add_probe(probe)
-      fail("You must pass an Uptrends::Probe")           unless Uptrends::Probe === probe
-      fail("The probe you passed does not have a guid.") unless probe.attributes.include?(:guid)
-      fail("This group does not have a guid.")           unless self.attributes.include?(:guid)
+      probe_operation(probe, :post)
+    end
 
-      body = JSON.dump({"ProbeGuid" => probe.guid})
-      response = @client.class.post("#{api_url}/#{@guid}/members", body: body)
-      self.class.check_error!(response)
+    def remove_probe(probe)
+      probe_operation(probe, :delete)
     end
 
     def members
@@ -24,6 +22,16 @@ module Uptrends
     private
     def api_url
       "/probegroups"
+    end
+
+    def probe_operation(probe, method)
+      fail("You must pass an Uptrends::Probe")           unless Uptrends::Probe === probe
+      fail("The probe you passed does not have a guid.") unless probe.attributes.include?(:guid)
+      fail("This group does not have a guid.")           unless self.attributes.include?(:guid)
+
+      body = JSON.dump({"ProbeGuid" => probe.guid})
+      response = @client.class.send(method, "#{api_url}/#{@guid}/members", body: body)
+      self.class.check_error!(response)
     end
 
   end
