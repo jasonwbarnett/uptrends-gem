@@ -40,7 +40,14 @@ module Uptrends
 
     def self.parse(client, response)
       check_error!(response)
-      response.parsed_response
+      parsed_response = response.parsed_response
+      if Array === parsed_response
+        parsed_response.map do |item|
+          new(client, response, item)
+        end
+      else
+        new(client, response, parsed_response)
+      end
     end
 
     # This method sets up all of our attr_accessor so we can easily edit probe attributes
