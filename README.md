@@ -1,8 +1,10 @@
-# Uptrends
+# Uptrends RESTful API Client
 
 [![Code Climate](https://codeclimate.com/github/jasonwbarnett/uptrends-gem/badges/gpa.svg)](https://codeclimate.com/github/jasonwbarnett/uptrends-gem) [![Test Coverage](https://codeclimate.com/github/jasonwbarnett/uptrends-gem/badges/coverage.svg)](https://codeclimate.com/github/jasonwbarnett/uptrends-gem) [![Build Status](https://travis-ci.org/jasonwbarnett/uptrends-gem.svg?branch=master)](https://travis-ci.org/jasonwbarnett/uptrends-gem)
 
 This is a ruby wrapper around the [Uptrends API][2]. Uptrends is a monitoring service that let's you monitor Web pages, Web services, Mail servers, Database servers, DNS, SSL certificates, FTP and more.
+
+NOTE: This is a 3rd party gem and not an official product from Uptrends.
 
 ## Installation
 
