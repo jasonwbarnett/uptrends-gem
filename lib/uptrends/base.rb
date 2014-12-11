@@ -74,6 +74,15 @@ module Uptrends
       @attributes = attributes
     end
 
+    def to_s
+      string = []
+      attributes.each do |attr|
+        string << "#{attr}: #{object.send(attr)}"
+      end
+
+      "#{string.join("\n")}"
+    end
+
     def gen_request_body
       new_hash = @attributes.inject({}) do |memo,(k,v)|
         if k.to_s.underscore == 'guid'
