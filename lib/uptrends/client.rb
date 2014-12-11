@@ -37,8 +37,13 @@ module Uptrends
     end
 
     def add_probe(opts = {})
-      probe = Uptrends::Probe.new(self, nil, opts)
-      probe.create!
+      p = Uptrends::Probe.new(self, nil, opts)
+      p.create!
+    end
+
+    def add_probe_group(opts = {})
+      pg = Uptrends::ProbeGroup.new(self, nil, opts)
+      pg.create!
     end
 
     private
