@@ -12,9 +12,9 @@ module Uptrends
       gen_and_set_accessors
     end
 
-    #def method_missing(name, *args, &block)
-    #  @attributes[name] or super
-    #end
+    def method_missing(name, *args, &block)
+      @attributes[name] or super
+    end
 
     def respond_to?(name)
       super(name) || @attributes.key?(name)
