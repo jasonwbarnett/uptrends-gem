@@ -7,5 +7,9 @@ module Uptrends
       "/checkpointservers"
     end
 
+    undef_method :create!
+    undef_method :update!
+    undef_method :delete!
+
   end
 end

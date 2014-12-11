@@ -50,6 +50,17 @@ module Uptrends
       end
     end
 
+    def to_s
+      string = []
+      attributes.each do |attr|
+        string << "#{attr}: #{self.send(attr)}"
+      end
+
+      "#{string.join("\n")}"
+    end
+
+    private
+
     # This method sets up all of our attr_accessor so we can easily edit probe attributes
     def gen_and_set_accessors
       attributes = []
@@ -71,15 +82,6 @@ module Uptrends
       end
 
       @attributes = attributes
-    end
-
-    def to_s
-      string = []
-      attributes.each do |attr|
-        string << "#{attr}: #{self.send(attr)}"
-      end
-
-      "#{string.join("\n")}"
     end
 
     def gen_request_body
