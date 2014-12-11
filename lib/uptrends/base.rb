@@ -13,14 +13,6 @@ module Uptrends
       gen_and_set_accessors
     end
 
-    def method_missing(name, *args, &block)
-      @attributes[name] or super
-    end
-
-    def respond_to?(name)
-      super(name) || @attributes.key?(name)
-    end
-
     def create!
       response = @client.class.post(api_url, body: gen_request_body)
       self.class.check_error!(response)
@@ -32,7 +24,7 @@ module Uptrends
     end
 
     def delete!
-      response = @client.class.delete("#{api_url}/#{guid}")
+      response = @client.class.delete("#{api_url}/#{@guid}")
       self.class.check_error!(response)
     end
 
@@ -77,7 +69,7 @@ module Uptrends
     def to_s
       string = []
       attributes.each do |attr|
-        string << "#{attr}: #{object.send(attr)}"
+        string << "#{attr}: #{self.send(attr)}"
       end
 
       "#{string.join("\n")}"
