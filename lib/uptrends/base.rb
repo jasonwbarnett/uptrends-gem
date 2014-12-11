@@ -95,7 +95,7 @@ module Uptrends
       end
 
       request_body = JSON.dump(new_hash)
-      @client.logger.debug("Request Body :: #{request_body}") if @client.debug
+      puts "DEBUG :: Request Body :: #{request_body}" if @client.debug
 
       request_body
     end
