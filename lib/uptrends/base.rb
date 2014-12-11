@@ -5,7 +5,7 @@ require "active_support/inflector"
 module Uptrends
   class Base
 
-    attr_reader :attributes, :api_url
+    attr_reader :attributes
 
     def initialize(client, response, attributes = {})
       @client     = client
@@ -15,7 +15,7 @@ module Uptrends
 
     def create!
       response = @client.class.post(api_url, body: gen_request_body)
-      self.class.check_error!(response)
+      self.class.parse(@client, response)
     end
 
     def update!
@@ -95,6 +95,9 @@ module Uptrends
       end
 
       request_body = JSON.dump(new_hash)
+      @client.logger.debug("Request Body :: #{request_body}") if @client.debug
+
+      request_body
     end
 
   end

@@ -1,4 +1,5 @@
 require "httparty"
+require "logger"
 require "uptrends/probe"
 require "uptrends/probe_group"
 require "uptrends/checkpoint"
@@ -9,11 +10,17 @@ module Uptrends
     format :json
     base_uri('https://api.uptrends.com/v3')
 
-    attr_reader :username
+    attr_reader :username, :debug, :logger
 
     def initialize(opts = {})
       @username = opts[:username] ? opts[:username] : fail("You must specify the :username option")
       password  = opts[:password] ? opts[:password] : fail("You must specify the :password option")
+      @debug    = opts[:debug]
+
+      if @debug
+        @logger       = ::Logger.new(STDOUT)
+        @logger.level = ::Logger::DEBUG
+      end
 
       # This makes it so that every request uses basic auth
       self.class.basic_auth(@username, password)
@@ -35,12 +42,17 @@ module Uptrends
       get_all(Uptrends::ProbeGroup)
     end
 
+    def add_probe(opts = {})
+      probe = Uptrends::Probe.new(self, nil, opts)
+      probe.create!
+    end
+
     private
     def get_all(type)
-      if type == Uptrends::ProbeGroup
-        uri = '/probegroups'
-      elsif type == Uptrends::Probe
+      if type == Uptrends::Probe
         uri = '/probes'
+      elsif type == Uptrends::ProbeGroup
+        uri = '/probegroups'
       elsif type == Uptrends::Checkpoint
         uri = '/checkpointservers'
       else
