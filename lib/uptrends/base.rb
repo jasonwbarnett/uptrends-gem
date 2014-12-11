@@ -19,7 +19,7 @@ module Uptrends
     end
 
     def update!
-      response = @client.class.put("#{api_url}/#{guid}", body: gen_request_body)
+      response = @client.class.put("#{api_url}/#{@guid}", body: gen_request_body)
       self.class.check_error!(response)
     end
 
