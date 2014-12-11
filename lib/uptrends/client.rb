@@ -32,7 +32,7 @@ module Uptrends
     end
 
     def probe_groups
-      @probe_groups ||= get_probe_groups
+      get_probe_groups
     end
 
     private
@@ -62,22 +62,6 @@ module Uptrends
       res = self.class.get(uri)
 
       type.parse(self, res)
-    end
-
-    def gen_new_probe_hash(name, url, check_frequency = 15, match_pattern = nil)
-      base_hash = {"Name"=>"", "URL"=>"", "CheckFrequency"=>check_frequency, "IsActive"=>true, "GenerateAlert"=>true, "Notes"=>"", "PerformanceLimit1"=>60000, "PerformanceLimit2"=>60000, "ErrorOnLimit1"=>false, "ErrorOnLimit2"=>false, "MinBytes"=>0, "ErrorOnMinBytes"=>false, "Timeout"=>30000, "TcpConnectTimeout"=>10000, "MatchPattern"=>"", "DnsLookupMode"=>"Local", "UserAgent"=>"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1;)", "UserName"=>"", "Password"=>"", "IsCompetitor"=>false, "Checkpoints"=>"", "HttpMethod"=>"Get", "PostData"=>""}
-
-      if url =~ %r{^https:}i
-        base_hash.merge!({"Name"=>name, "URL"=>url, "ProbeType"=>"Https", "Port"=>443})
-      elsif url =~ %r{^http:}i
-        base_hash.merge!({"Name"=>name, "URL"=>url, "ProbeType"=>"Http", "Port"=>80})
-      else
-        fail("The URL you provided didn't start with http or https!")
-      end
-
-      base_hash.merge!({"MatchPattern"=>match_pattern}) unless match_pattern.nil?
-
-      base_hash
     end
 
   end

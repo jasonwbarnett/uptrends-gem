@@ -1,5 +1,6 @@
 require "uptrends/api_error"
 require "json"
+require "active_support/inflector"
 
 module Uptrends
   class Base
