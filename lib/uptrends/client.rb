@@ -24,30 +24,18 @@ module Uptrends
     end
 
     def probes
-      get_probes
-    end
-
-    def checkpoints
-      get_checkpoints
-    end
-
-    def probe_groups
-      get_probe_groups
-    end
-
-    private
-    def get_probes
       get_all(Uptrends::Probe)
     end
 
-    def get_checkpoints
+    def checkpoints
       get_all(Uptrends::Checkpoint)
     end
 
-    def get_probe_groups
+    def probe_groups
       get_all(Uptrends::ProbeGroup)
     end
 
+    private
     def get_all(type)
       if type == Uptrends::ProbeGroup
         uri = '/probegroups'
