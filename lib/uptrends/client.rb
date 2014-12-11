@@ -24,16 +24,24 @@ module Uptrends
       self.class.headers({'Content-Type' => 'application/json', 'Accept' => 'application/json'})
     end
 
+    def probe(guid)
+      get(Uptrends::Probe, guid: guid)
+    end
+
+    def probe_group(guid)
+      get(Uptrends::ProbeGroup, guid: guid)
+    end
+
     def probes
-      get_all(Uptrends::Probe)
+      get(Uptrends::Probe, all: true)
     end
 
     def checkpoints
-      get_all(Uptrends::Checkpoint)
+      get(Uptrends::Checkpoint, all: true)
     end
 
     def probe_groups
-      get_all(Uptrends::ProbeGroup)
+      get(Uptrends::ProbeGroup, all: true)
     end
 
     def add_probe(opts = {})
@@ -47,7 +55,10 @@ module Uptrends
     end
 
     private
-    def get_all(type)
+    def get(type, opts = {})
+      all  = opts[:all]  ? opts[:all]  : false
+      guid = opts[:guid] ? opts[:guid] : nil
+
       if type == Uptrends::Probe
         uri = '/probes'
       elsif type == Uptrends::ProbeGroup
@@ -58,7 +69,11 @@ module Uptrends
         fail("You passed an unknown type. Try Uptrends::Probe, Uptrends::ProbeGroup or Uptrends::Checkpoint")
       end
 
-      res = self.class.get(uri)
+      if all
+        res = self.class.get(uri)
+      elsif guid
+        res = self.class.get("#{uri}/#{guid}")
+      end
 
       type.parse(self, res)
     end
