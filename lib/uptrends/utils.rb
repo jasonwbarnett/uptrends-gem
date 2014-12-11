@@ -3,8 +3,8 @@ require 'active_support/inflector'
 
 module Uptrends
   class Utils
-    def self.gen_request_body(object)
-      new_hash = object.original_hash.inject({}) do |memo,(k,v)|
+    def self.gen_request_body(attributes)
+      new_hash = attributes.inject({}) do |memo,(k,v)|
         if k.to_s.underscore == 'guid'
           memo
         else

@@ -1,20 +1,83 @@
-require 'json'
-require 'uptrends/utils'
+require "uptrends/api_error"
+require "json"
 
 module Uptrends
   class Base
 
-    attr_reader :original_hash, :attributes
+    attr_reader :attributes, :url
 
-    def initialize(probe_hash = {})
-      @original_hash = probe_hash
-
-      Uptrends::Utils.gen_and_set_accessors(self)
+    def initialize(client, response, attributes = {})
+      @client     = client
+      @attributes = attributes
     end
 
-    def to_s
-      Uptrends::Utils.to_s(self)
+    def method_missing(name, *args, &block)
+      @attributes[name] or super
+    end
+
+    def respond_to?(name)
+      super(name) || @attributes.key?(name)
+    end
+
+    def create!
+      @client.class.post(url, body: gen_request_body(@attributes))
+    end
+
+    def update!
+      @client.class.put(url, body: gen_request_body(@attributes))
+    end
+
+    def self.check_error!(response)
+      response_code = response.response.code.to_i
+      case response_code
+        when 200...300
+          response.parsed_response
+        else
+          raise Uptrends::ApiError.new(response.parsed_response)
+      end
+    end
+
+    def self.parse(client, response)
+      check_error!(response)
+      gen_and_set_accessors(self)
+      response.parsed_response
+    end
+
+    # This method sets up all of our attr_accessor so we can easily edit probe attributes
+    def self.gen_and_set_accessors(object)
+      attributes = []
+      object.original_hash.each_pair do |k,v|
+
+        k = k.to_s.underscore
+        case k
+        when "guid"
+          # setup attr_reader for guid and set it's value.
+          object.class.send(:attr_reader, k)
+          object.instance_variable_set("@#{k}", v)
+        else
+          # setup a attr_accessor for all other attributes
+          object.class.send(:attr_accessor, k)
+          object.send("#{k}=", v)
+        end
+        attributes << k.to_sym
+
+      end
+      object.instance_variable_set(:@attributes, attributes)
+    end
+
+    def self.gen_request_body(attributes)
+      new_hash = attributes.inject({}) do |memo,(k,v)|
+        if k.to_s.underscore == 'guid'
+          memo
+        else
+          memo[k.to_s.camelize] = object.send(k.to_s.underscore)
+          memo
+        end
+      end
+
+      request_body = JSON.dump(new_hash)
     end
 
   end
 end
+
