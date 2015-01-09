@@ -23,7 +23,7 @@ describe Uptrends::Client do
       proc { Uptrends::Client.new(password: password) }.must_raise RuntimeError
     end
 
-    it "should raise excepetion when password is not provided." do
+    it "should raise RuntimeError when password is not provided." do
       proc { Uptrends::Client.new(username: username) }.must_raise RuntimeError
     end
   end
@@ -57,15 +57,67 @@ describe Uptrends::Client do
       uac.class.default_params[:format].must_equal 'json'
     end
 
-    it "should have a #username method" do
-      uac.must_respond_to :username
+    it "headers should be set to application/json" do
+      uac.class.headers.must_equal({'Content-Type' => 'application/json', 'Accept' => 'application/json'})
     end
   end
 
-  describe "querying Uptrends" do
+  describe "After Uptrends::Client is initialized" do
     let(:uac) { Uptrends::Client.new(username: username, password: password) }
 
-    describe "GET Probes" do
+    it "should have a #username method" do
+      uac.must_respond_to :username
+    end
+
+    it "should have a #probe method" do
+      uac.must_respond_to :probe
+    end
+
+    it "should have a #probe_group method" do
+      uac.must_respond_to :probe_group
+    end
+
+    it "should have a #probes method" do
+      uac.must_respond_to :probes
+    end
+
+    it "should have a #checkpoints method" do
+      uac.must_respond_to :checkpoints
+    end
+
+    it "should have a #probe_groups method" do
+      uac.must_respond_to :probe_groups
+    end
+
+    it "should have a #add_probe method" do
+      uac.must_respond_to :add_probe
+    end
+
+    it "should have a #add_probe_group method" do
+      uac.must_respond_to :add_probe_group
+    end
+  end
+
+  describe "Querying Uptrends" do
+    let(:uac) { Uptrends::Client.new(username: username, password: password) }
+
+    describe "#probe" do
+      before do
+        VCR.insert_cassette('GET Probe', :record => :new_episodes, match_requests_on: [:method, :body, :headers, :query, :path])
+        #Did you mean one of :method, :uri, :body, :headers, :host, :path, :query, :body_as_json?
+      end
+
+      after do
+        VCR.eject_cassette
+      end
+
+      it "should return a single Uptrends::Probe object" do
+        probe = uac.probe('bbfc88d4-8f71-4325-ae02-00c7f479cc90')
+        probe.class.must_equal Uptrends::Probe
+      end
+    end
+
+    describe "#probes" do
       before do
         VCR.insert_cassette('GET Probes', :record => :new_episodes, match_requests_on: [:method, :body, :headers, :query, :path])
         #Did you mean one of :method, :uri, :body, :headers, :host, :path, :query, :body_as_json?
@@ -75,21 +127,65 @@ describe Uptrends::Client do
         VCR.eject_cassette
       end
 
-      it "must has a #get_probes method" do
-        uac.wont_respond_to :get_probes
-      end
-
-      it "must have a #probes method" do
-        uac.must_respond_to :probes
-      end
-
       it "should return an array of Uptrends::Probe objects" do
         probes = uac.probes
         probes.each do |probe|
-          #puts probe.class
           probe.class.must_equal Uptrends::Probe
         end
       end
     end
+
+    describe "#probe_group" do
+      before do
+        VCR.insert_cassette('GET Probe Group', :record => :new_episodes, match_requests_on: [:method, :body, :headers, :query, :path])
+        #Did you mean one of :method, :uri, :body, :headers, :host, :path, :query, :body_as_json?
+      end
+
+      after do
+        VCR.eject_cassette
+      end
+
+      it "should return a single Uptrends::ProbeGroup object" do
+        probe = uac.probe_group('819ddc84-a4f2-4369-a046-4e40559fde07')
+        probe.class.must_equal Uptrends::ProbeGroup
+      end
+    end
+
+    describe "#probe_groups" do
+      before do
+        VCR.insert_cassette('GET Probe Groups', :record => :new_episodes, match_requests_on: [:method, :body, :headers, :query, :path])
+        #Did you mean one of :method, :uri, :body, :headers, :host, :path, :query, :body_as_json?
+      end
+
+      after do
+        VCR.eject_cassette
+      end
+
+      it "should return an array of Uptrends::ProbeGroup objects" do
+        probe_groups = uac.probe_groups
+        probe_groups.each do |probe_group|
+          probe_group.class.must_equal Uptrends::ProbeGroup
+        end
+      end
+    end
+
+    describe "#checkpoints" do
+      before do
+        VCR.insert_cassette('GET Checkpoints', :record => :new_episodes, match_requests_on: [:method, :body, :headers, :query, :path])
+        #Did you mean one of :method, :uri, :body, :headers, :host, :path, :query, :body_as_json?
+      end
+
+      after do
+        VCR.eject_cassette
+      end
+
+      it "should return an array of Uptrends::Checkpoint objects" do
+        checkpoints = uac.checkpoints
+        checkpoints.each do |checkpoint|
+          checkpoint.class.must_equal Uptrends::Checkpoint
+        end
+      end
+    end
+
   end
 end
