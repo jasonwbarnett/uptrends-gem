@@ -1,0 +1,44 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.uptrends.com/v3/probes/bbfc88d4-8f71-1234-ae02-00c7f479cc90?format=json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - Microsoft-IIS/7.5
+      X-Servername:
+      - OBI
+      X-Powered-By:
+      - ASP.NET
+      - ServiceStack/3.46 Win32NT/.NET
+      X-Aspnet-Version:
+      - 4.0.30319
+      X-Server:
+      - OBI
+      Date:
+      - Fri, 09 Jan 2015 07:40:18 GMT
+      Content-Length:
+      - '625'
+    body:
+      encoding: UTF-8
+      string: '{"Guid":"bbfc88d48f711234ae0200c7f479cc90","Name":"Amil","URL":"https://www.website.com/User/LoginAdmin","Port":443,"CheckFrequency":1,"ProbeType":"Https","IsActive":true,"GenerateAlert":true,"Notes":"{\"dbname\":\"amil\",\"app\":\"r209\",\"db\":\"r209\"}","PerformanceLimit1":2500,"PerformanceLimit2":5000,"ErrorOnLimit1":false,"ErrorOnLimit2":false,"MinBytes":0,"ErrorOnMinBytes":false,"Timeout":20000,"TcpConnectTimeout":10000,"MatchPattern":"j_username","DnsLookupMode":"Local","UserAgent":"Uptrends
+        Monitoring Agent","UserName":"","Password":"","IsCompetitor":false,"Checkpoints":"","HttpMethod":"Get","PostData":""}'
+    http_version: 
+  recorded_at: Fri, 09 Jan 2015 07:40:19 GMT
+recorded_with: VCR 2.9.2

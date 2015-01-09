@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.uptrends.com/v3/probegroups?format=json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - Microsoft-IIS/7.5
+      X-Servername:
+      - OBI
+      X-Powered-By:
+      - ASP.NET
+      - ServiceStack/3.46 Win32NT/.NET
+      X-Aspnet-Version:
+      - 4.0.30319
+      X-Server:
+      - OBI
+      Date:
+      - Fri, 09 Jan 2015 07:46:20 GMT
+      Content-Length:
+      - '1547'
+    body:
+      encoding: UTF-8
+      string: '[{"Guid":"c8d1a0f104494c31811850f3d4fd4213","Name":"All probes","IsAll":true,"IsClientProbeGroup":false},{"Guid":"829218d291824bad9ccc31fe9d5b2418","Name":"Allstate","IsAll":false,"IsClientProbeGroup":false},{"Guid":"03b00df820b54b1199841db1e011b135","Name":"Chicago
+        sample","IsAll":false,"IsClientProbeGroup":false},{"Guid":"11149e33e5054cbd8b2a18a49892f539","Name":"Citi
+        Bank","IsAll":false,"IsClientProbeGroup":true},{"Guid":"b0c33b4239114ea28151bfbbfc1d4ad0","Name":"Fidelity","IsAll":false,"IsClientProbeGroup":false},{"Guid":"0c4e1181ed5a4eb2a4a3d13bd4c4f114","Name":"HK
+        Group","IsAll":false,"IsClientProbeGroup":false},{"Guid":"8fab4141fc414f0aad1b511d4a53812f","Name":"Japan","IsAll":false,"IsClientProbeGroup":false},{"Guid":"819ddc84a4f24319a0414e40559fde01","Name":"Linux
+        JAVA","IsAll":false,"IsClientProbeGroup":false},{"Guid":"1ce8e13a45e0459a8125ae1f3d9eb914","Name":"Lloyds","IsAll":false,"IsClientProbeGroup":false},{"Guid":"ab252c2e4251428e94e41f253abe8ad2","Name":"London
+        sample","IsAll":false,"IsClientProbeGroup":false},{"Guid":"8119184811d94eee92c0e9db01a01c84","Name":"Mitre","IsAll":false,"IsClientProbeGroup":false},{"Guid":"4a3ec18513024134ae18f2fe1381f3a9","Name":"PHP","IsAll":false,"IsClientProbeGroup":false},{"Guid":"ebe83d1bfdee4f3295cb194d03a2adf5","Name":"r211","IsAll":false,"IsClientProbeGroup":false},{"Guid":"18d111baac0141f8a0ee15213814258f","Name":"Sales
+        Demo","IsAll":false,"IsClientProbeGroup":false},{"Guid":"f0e3a0235c114ec59b11fcd20812b1fd","Name":"SharePoint","IsAll":false,"IsClientProbeGroup":false}]'
+    http_version: 
+  recorded_at: Fri, 09 Jan 2015 07:46:20 GMT
+recorded_with: VCR 2.9.2
