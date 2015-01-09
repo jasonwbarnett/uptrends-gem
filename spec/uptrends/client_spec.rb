@@ -43,63 +43,63 @@ describe Uptrends::Client do
   end
 
   describe "When initializing a new Uptrends::Client with a username and password" do
-    let(:uac) { Uptrends::Client.new(username: username, password: password) }
+    let(:uc) { Uptrends::Client.new(username: username, password: password) }
 
     it "auth[:username] should match the username provided" do
-      uac.class.default_options[:basic_auth][:username].must_equal username
+      uc.class.default_options[:basic_auth][:username].must_equal username
     end
 
     it "auth[:password] should match the password provided" do
-      uac.class.default_options[:basic_auth][:password].must_equal password
+      uc.class.default_options[:basic_auth][:password].must_equal password
     end
 
     it "default_params[:format] should be set to json" do
-      uac.class.default_params[:format].must_equal 'json'
+      uc.class.default_params[:format].must_equal 'json'
     end
 
     it "headers should be set to application/json" do
-      uac.class.headers.must_equal({'Content-Type' => 'application/json', 'Accept' => 'application/json'})
+      uc.class.headers.must_equal({'Content-Type' => 'application/json', 'Accept' => 'application/json'})
     end
   end
 
   describe "After Uptrends::Client is initialized" do
-    let(:uac) { Uptrends::Client.new(username: username, password: password) }
+    let(:uc) { Uptrends::Client.new(username: username, password: password) }
 
     it "should have a #username method" do
-      uac.must_respond_to :username
+      uc.must_respond_to :username
     end
 
     it "should have a #probe method" do
-      uac.must_respond_to :probe
+      uc.must_respond_to :probe
     end
 
     it "should have a #probe_group method" do
-      uac.must_respond_to :probe_group
+      uc.must_respond_to :probe_group
     end
 
     it "should have a #probes method" do
-      uac.must_respond_to :probes
+      uc.must_respond_to :probes
     end
 
     it "should have a #checkpoints method" do
-      uac.must_respond_to :checkpoints
+      uc.must_respond_to :checkpoints
     end
 
     it "should have a #probe_groups method" do
-      uac.must_respond_to :probe_groups
+      uc.must_respond_to :probe_groups
     end
 
     it "should have a #add_probe method" do
-      uac.must_respond_to :add_probe
+      uc.must_respond_to :add_probe
     end
 
     it "should have a #add_probe_group method" do
-      uac.must_respond_to :add_probe_group
+      uc.must_respond_to :add_probe_group
     end
   end
 
   describe "Querying Uptrends" do
-    let(:uac) { Uptrends::Client.new(username: username, password: password) }
+    let(:uc) { Uptrends::Client.new(username: username, password: password) }
 
     describe "#probe" do
       before do
@@ -112,7 +112,7 @@ describe Uptrends::Client do
       end
 
       it "should return a single Uptrends::Probe object" do
-        probe = uac.probe('bbfc88d4-8f71-4325-ae02-00c7f479cc90')
+        probe = uc.probe('bbfc88d4-8f71-1234-ae02-00c7f479cc90')
         probe.class.must_equal Uptrends::Probe
       end
     end
@@ -128,7 +128,7 @@ describe Uptrends::Client do
       end
 
       it "should return an array of Uptrends::Probe objects" do
-        probes = uac.probes
+        probes = uc.probes
         probes.each do |probe|
           probe.class.must_equal Uptrends::Probe
         end
@@ -146,7 +146,7 @@ describe Uptrends::Client do
       end
 
       it "should return a single Uptrends::ProbeGroup object" do
-        probe = uac.probe_group('819ddc84-a4f2-4369-a046-4e40559fde07')
+        probe = uc.probe_group('819ddc84-a4f2-1234-a046-4e40559fde07')
         probe.class.must_equal Uptrends::ProbeGroup
       end
     end
@@ -162,7 +162,7 @@ describe Uptrends::Client do
       end
 
       it "should return an array of Uptrends::ProbeGroup objects" do
-        probe_groups = uac.probe_groups
+        probe_groups = uc.probe_groups
         probe_groups.each do |probe_group|
           probe_group.class.must_equal Uptrends::ProbeGroup
         end
@@ -180,7 +180,7 @@ describe Uptrends::Client do
       end
 
       it "should return an array of Uptrends::Checkpoint objects" do
-        checkpoints = uac.checkpoints
+        checkpoints = uc.checkpoints
         checkpoints.each do |checkpoint|
           checkpoint.class.must_equal Uptrends::Checkpoint
         end

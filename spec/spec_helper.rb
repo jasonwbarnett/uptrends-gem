@@ -1,10 +1,12 @@
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 require_relative '../lib/uptrends'
+require_relative '../lib/uptrends/api_error'
+require_relative '../lib/uptrends/base'
+require_relative '../lib/uptrends/checkpoint'
 require_relative '../lib/uptrends/client'
 require_relative '../lib/uptrends/probe'
 require_relative '../lib/uptrends/probe_group'
-require_relative '../lib/uptrends/utils'
 require 'minitest/autorun'
 require 'webmock/minitest'
 require 'vcr'
