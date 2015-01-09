@@ -40,4 +40,8 @@ describe Uptrends::Probe do
   it "#to_s" do
     up.to_s.must_equal "guid: myguid\nhello_you: myvalue\nother: thing"
   end
+
+  it "#api_url (private)" do
+    up.send(:api_url).must_equal "/probes"
+  end
 end

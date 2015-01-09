@@ -8,6 +8,7 @@ require_relative '../lib/uptrends/client'
 require_relative '../lib/uptrends/probe'
 require_relative '../lib/uptrends/probe_group'
 require 'minitest/autorun'
+require 'minitest/pride'
 require 'webmock/minitest'
 require 'vcr'
 
