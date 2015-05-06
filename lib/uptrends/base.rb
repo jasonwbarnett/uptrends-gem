@@ -38,6 +38,14 @@ module Uptrends
       end
     end
 
+    # @param [yyyy/mm/dd] start_of_period
+    # @param [yyyy/mm/dd] end_of_period
+    # @param [Day, Week, Month, Year, ProbeGroup, Probe, Checkpoint, ErrorCode, ErrorLevel] dimension
+    def statistics(start_of_period, end_of_period, dimension)
+      response = @client.class.get("#{api_url}/#{@guid}/statistics?Start=#{start_of_period}&End=#{end_of_period}&Dimension=#{dimension}", body: gen_request_body)
+      self.class.check_error!(response)
+    end
+
     def self.parse(client, response)
       check_error!(response)
       parsed_response = response.parsed_response
