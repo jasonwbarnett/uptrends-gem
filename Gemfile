@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'httparty',      '~> 0.13'
+gem 'activesupport', '~> 03.2.13'
 
 group :test do
   gem 'webmock'
