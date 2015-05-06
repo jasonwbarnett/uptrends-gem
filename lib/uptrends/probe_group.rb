@@ -12,7 +12,7 @@ module Uptrends
     end
 
     def members
-      fail("This group does not have a guid.")           unless self.attributes.include?(:guid)
+      fail('This group does not have a guid.')           unless self.attributes.include?(:guid)
 
       response = @client.class.get("#{api_url}/#{@guid}/members")
       self.class.check_error!(response)
@@ -21,15 +21,15 @@ module Uptrends
 
     private
     def api_url
-      "/probegroups"
+      '/probegroups'
     end
 
     def probe_operation(probe, method)
-      fail("You must pass an Uptrends::Probe")           unless Uptrends::Probe === probe
-      fail("The probe you passed does not have a guid.") unless probe.attributes.include?(:guid)
-      fail("This group does not have a guid.")           unless self.attributes.include?(:guid)
+      fail('You must pass an Uptrends::Probe')           unless Uptrends::Probe === probe
+      fail('The probe you passed does not have a guid.') unless probe.attributes.include?(:guid)
+      fail('This group does not have a guid.')           unless self.attributes.include?(:guid)
 
-      body = JSON.dump({"ProbeGuid" => probe.guid})
+      body = JSON.dump({'ProbeGuid' => probe.guid})
       response = @client.class.send(method, "#{api_url}/#{@guid}/members", body: body)
       self.class.check_error!(response)
 

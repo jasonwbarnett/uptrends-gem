@@ -14,7 +14,7 @@ module Uptrends
 
     private
     def api_url
-      "/checkpointservers"
+      '/checkpointservers'
     end
 
     def gen_and_set_accessors

@@ -25,7 +25,7 @@ module Uptrends
 
     private
     def api_url
-      "/probes"
+      '/probes'
     end
 
   end

@@ -1,3 +1,3 @@
-require "uptrends/version"
-require "uptrends/client"
+require 'uptrends/version'
+require 'uptrends/client'
 

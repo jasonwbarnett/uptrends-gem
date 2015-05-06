@@ -1,6 +1,6 @@
-require "uptrends/api_error"
-require "json"
-require "active_support/inflector"
+require 'uptrends/api_error'
+require 'json'
+require 'active_support/inflector'
 
 module Uptrends
   class Base
@@ -68,7 +68,7 @@ module Uptrends
 
         k = k.to_s.underscore
         case k
-        when "guid"
+        when 'guid'
           # setup attr_reader for guid and set it's value.
           self.class.send(:attr_reader, k)
           self.instance_variable_set("@#{k}", v)
