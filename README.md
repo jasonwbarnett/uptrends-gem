@@ -1,6 +1,6 @@
 # Uptrends RESTful API Client
 
-[![Code Climate](https://codeclimate.com/github/microting/uptrends-gem/badges/gpa.svg)](https://codeclimate.com/github/microting/uptrends-gem) [![Test Coverage](https://codeclimate.com/github/microting/uptrends-gem/badges/coverage.svg)](https://codeclimate.com/github/microting/uptrends-gem/coverage) [![Build Status](https://travis-ci.org/microting/uptrends-gem.svg)](https://travis-ci.org/microting/uptrends-gem) [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/microting/uptrends-gem/blob/master/LICENSE.txt)
+[![Code Climate](https://codeclimate.com/github/microting/uptrends-gem/badges/gpa.svg)](https://codeclimate.com/github/microting/uptrends-gem) [![Test Coverage](https://codeclimate.com/github/microting/uptrends-gem/badges/coverage.svg)](https://codeclimate.com/github/microting/uptrends-gem/coverage) [![Build Status](https://travis-ci.org/microting/uptrends-gem.svg)](https://travis-ci.org/microting/uptrends-gem) [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/microting/uptrends-gem/blob/master/LICENSE.txt) [![Gem Version](https://badge.fury.io/rb/uptrends_extended.svg)](http://badge.fury.io/rb/uptrends_extended)
 
 This is a ruby wrapper around the [Uptrends API][2]. Uptrends is a monitoring service that let's you monitor Web pages, Web services, Mail servers, Database servers, DNS, SSL certificates, FTP and more.
 
