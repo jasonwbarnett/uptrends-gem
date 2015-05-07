@@ -1,5 +1,9 @@
 # UptrendsExtended Gem Changelog
 
+## 0.7.0
+- Added the statistics part, so you are able to get statistics about probes and probegroups
+- Minor syntax fixes for rails 3 and up
+
 ## 0.6.0
 - Completely redesigned the UptrendsExtended::Client class to make it more idiomatic.
 - Completely redesigned the UptrendsExtended::Base class to make it more idiomatic.

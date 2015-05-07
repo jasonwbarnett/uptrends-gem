@@ -30,6 +30,9 @@ Or install it yourself as:
     p.attributes                          #=> [:guid, :name, :url, :port, :check_frequency, :probe_type, :is_active, :generate_alert, :notes, :performance_limit1, :performance_limit2, :error_on_limit1, :error_on_limit2, :min_bytes, :error_on_min_bytes, :timeout, :tcp_connect_timeout, :match_pattern, :dns_lookup_mode, :user_agent, :user_name, :password, :is_competitor, :checkpoints, :http_method, :post_data]
     p.guid                                #=> "7ef43a1b255949f5a052444348971690"
     p.name                                #=> "My Probe's Name"
+    p.statistics('2015/01/01', '2015/12/31', 'Year') #=> [{"Dimension"=>"2015", "Alerts"=>0, "SLAPercentage"=>99.8, "SLATotalTime"=>2, "SLAOperatorResponseTime"=>15, "AvgOperatorResponseTime"=>0, "PercentageOK"=>99.82507, "PercentageError"=>0.1749256, "PercentageUnknown"=>0, "PercentageUptime"=>99.82507, "TotalChecks"=>3168, "Errors"=>5, "UnconfirmedErrors"=>12, "SecondsOK"=>1893489, "SecondsError"=>3318, "SecondsUnknown"=>0, "AverageTotalTime"=>1.229745, "AverageResolveTime"=>0.1484861, "AverageConnectionTime"=>0.1247686, "AverageDownloadTime"=>0.9560824, "AverageTotalBytes"=>6961}]
+    p.uptime_this_year                    #=> {:sla=>99.8, :uptime=>99.82507}
+    p.uptime_last_12_month                #=> {:sla=>99.8, :uptime=>99.82158}
 
     probe_groups = u.probe_groups         #=> [#<UptrendsExtended::ProbeGroup>, #<UptrendsExtended::ProbeGroup>, ... ]
     pg = probe_groups.first               #=> #<UptrendsExtended::ProbeGroup>
@@ -46,7 +49,7 @@ Or install it yourself as:
 
 ## Contributing
 
-1. Fork it ( https://github.com/jasonwbarnett/uptrends-gem/fork )
+1. Fork it ( https://github.com/microting/uptrends-gem/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
