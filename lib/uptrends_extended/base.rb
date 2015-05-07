@@ -48,13 +48,21 @@ module UptrendsExtended
 
     def uptime_this_year
       stats = statistics("#{Time.now.year}/01/01", "#{Time.now.year}/12/31", 'Year')
-      {sla: stats[0]['SLAPercentage'], uptime: stats[0]['PercentageUptime']}
+      if stats.blank?
+        {sla: 0, uptime: 0} # We return this because the probe has not been tested yet.
+      else
+        {sla: stats[0]['SLAPercentage'], uptime: stats[0]['PercentageUptime']}
+      end
     end
 
     def uptime_last_12_months
       start_period = Time.now - 12.months
       stats = statistics(start_period.strftime('%Y/%m/%d'), Time.now.strftime('%Y/%m/%d'), 'Year')
-      {sla: stats[0]['SLAPercentage'], uptime: stats[0]['PercentageUptime']}
+      if stats.blank?
+        {sla: 0, uptime: 0} # We return this because the probe has not been tested yet.
+      else
+        {sla: stats[0]['SLAPercentage'], uptime: stats[0]['PercentageUptime']}
+      end
     end
 
     def self.parse(client, response)

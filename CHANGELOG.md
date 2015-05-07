@@ -1,5 +1,8 @@
 # UptrendsExtended Gem Changelog
 
+## 0.7.1
+- Handling the case where the probe has been created but no data have yet been collected
+
 ## 0.7.0
 - Added the statistics part, so you are able to get statistics about probes and probegroups
 - Minor syntax fixes for rails 3 and up
