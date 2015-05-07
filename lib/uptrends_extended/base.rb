@@ -46,6 +46,17 @@ module UptrendsExtended
       self.class.check_error!(response)
     end
 
+    def uptime_this_year
+      stats = statistics("#{Time.now.year}/01/01", "#{Time.now.year}/12/31", 'Year')
+      {sla: stats[0]['SLAPercentage'], uptime: stats[0]['PercentageUptime']}
+    end
+
+    def uptime_last_12_months
+      start_period = Time.now - 12.months
+      stats = statistics(start_period.strftime('%Y/%m/%d'), Time.now.strftime('%Y/%m/%d'), 'Year')
+      {sla: stats[0]['SLAPercentage'], uptime: stats[0]['PercentageUptime']}
+    end
+
     def self.parse(client, response)
       check_error!(response)
       parsed_response = response.parsed_response
