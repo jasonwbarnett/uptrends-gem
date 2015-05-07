@@ -1,6 +1,6 @@
-require 'uptrends/base'
+require 'uptrends_extended/base'
 
-module Uptrends
+module UptrendsExtended
   class ProbeGroup < Base
 
     def add_probe(probe)
@@ -16,7 +16,7 @@ module Uptrends
 
       response = @client.class.get("#{api_url}/#{@guid}/members")
       self.class.check_error!(response)
-      Uptrends::Probe.parse(self, response)
+      UptrendsExtended::Probe.parse(self, response)
     end
 
     private
@@ -25,7 +25,7 @@ module Uptrends
     end
 
     def probe_operation(probe, method)
-      fail('You must pass an Uptrends::Probe')           unless Uptrends::Probe === probe
+      fail('You must pass an UptrendsExtended::Probe')           unless UptrendsExtended::Probe === probe
       fail('The probe you passed does not have a guid.') unless probe.attributes.include?(:guid)
       fail('This group does not have a guid.')           unless self.attributes.include?(:guid)
 

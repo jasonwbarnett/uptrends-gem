@@ -1,6 +1,6 @@
-require 'uptrends/base'
+require 'uptrends_extended/base'
 
-module Uptrends
+module UptrendsExtended
   class Checkpoint < Base
 
     def initialize(client, response, attributes = {})

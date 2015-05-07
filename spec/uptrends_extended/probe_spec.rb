@@ -1,10 +1,10 @@
 require_relative '../spec_helper'
 
-describe Uptrends::Probe do
+describe UptrendsExtended::Probe do
   let(:username) { ENV['UPTRENDS_USERNAME'] }
   let(:password) { ENV['UPTRENDS_PASSWORD'] }
-  let(:uc) { Uptrends::Client.new(username: username, password: password) }
-  let(:up) { Uptrends::Probe.new(uc, nil, {'Guid' => 'myguid', 'HelloYou' => 'myvalue', 'other' => 'thing'}) }
+  let(:uc) { UptrendsExtended::Client.new(username: username, password: password) }
+  let(:up) { UptrendsExtended::Probe.new(uc, nil, {'Guid' => 'myguid', 'HelloYou' => 'myvalue', 'other' => 'thing'}) }
 
   it '#guid' do
     up.must_respond_to :guid

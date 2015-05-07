@@ -1,8 +1,8 @@
-require 'uptrends/api_error'
+require 'uptrends_extended/api_error'
 require 'json'
 require 'active_support/inflector'
 
-module Uptrends
+module UptrendsExtended
   class Base
 
     attr_reader :attributes
@@ -34,7 +34,7 @@ module Uptrends
         when 200...300
           response.parsed_response
         else
-          raise Uptrends::ApiError.new(response.parsed_response)
+          raise UptrendsExtended::ApiError.new(response.parsed_response)
       end
     end
 

@@ -1,9 +1,9 @@
 require 'httparty'
-require 'uptrends/probe'
-require 'uptrends/probe_group'
-require 'uptrends/checkpoint'
+require 'uptrends_extended/probe'
+require 'uptrends_extended/probe_group'
+require 'uptrends_extended/checkpoint'
 
-module Uptrends
+module UptrendsExtended
   class Client
     include HTTParty
     format :json
@@ -24,32 +24,32 @@ module Uptrends
     end
 
     def probe(guid)
-      get(Uptrends::Probe, guid: guid)
+      get(UptrendsExtended::Probe, guid: guid)
     end
 
     def probe_group(guid)
-      get(Uptrends::ProbeGroup, guid: guid)
+      get(UptrendsExtended::ProbeGroup, guid: guid)
     end
 
     def probes
-      get(Uptrends::Probe, all: true)
+      get(UptrendsExtended::Probe, all: true)
     end
 
     def checkpoints
-      get(Uptrends::Checkpoint, all: true)
+      get(UptrendsExtended::Checkpoint, all: true)
     end
 
     def probe_groups
-      get(Uptrends::ProbeGroup, all: true)
+      get(UptrendsExtended::ProbeGroup, all: true)
     end
 
     def add_probe(opts = {})
-      p = Uptrends::Probe.new(self, nil, opts)
+      p = UptrendsExtended::Probe.new(self, nil, opts)
       p.create!
     end
 
     def add_probe_group(opts = {})
-      pg = Uptrends::ProbeGroup.new(self, nil, opts)
+      pg = UptrendsExtended::ProbeGroup.new(self, nil, opts)
       pg.create!
     end
 
@@ -58,14 +58,14 @@ module Uptrends
       all  = opts[:all]  ? opts[:all]  : false
       guid = opts[:guid] ? opts[:guid] : nil
 
-      if type == Uptrends::Probe
+      if type == UptrendsExtended::Probe
         uri = '/probes'
-      elsif type == Uptrends::ProbeGroup
+      elsif type == UptrendsExtended::ProbeGroup
         uri = '/probegroups'
-      elsif type == Uptrends::Checkpoint
+      elsif type == UptrendsExtended::Checkpoint
         uri = '/checkpointservers'
       else
-        fail('You passed an unknown type. Try Uptrends::Probe, Uptrends::ProbeGroup or Uptrends::Checkpoint')
+        fail('You passed an unknown type. Try UptrendsExtended::Probe, UptrendsExtended::ProbeGroup or UptrendsExtended::Checkpoint')
       end
 
       if all
