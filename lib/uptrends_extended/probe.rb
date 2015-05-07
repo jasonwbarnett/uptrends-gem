@@ -1,6 +1,6 @@
-require 'uptrends/base'
+require 'uptrends_extended/base'
 
-module Uptrends
+module UptrendsExtended
   class Probe < Base
 
     def enable
@@ -25,7 +25,7 @@ module Uptrends
 
     private
     def api_url
-      "/probes"
+      '/probes'
     end
 
   end

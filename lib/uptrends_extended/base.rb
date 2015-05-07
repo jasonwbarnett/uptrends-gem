@@ -1,8 +1,8 @@
-require "uptrends/api_error"
-require "json"
-require "active_support/inflector"
+require 'uptrends_extended/api_error'
+require 'json'
+require 'active_support/inflector'
 
-module Uptrends
+module UptrendsExtended
   class Base
 
     attr_reader :attributes
@@ -34,7 +34,34 @@ module Uptrends
         when 200...300
           response.parsed_response
         else
-          raise Uptrends::ApiError.new(response.parsed_response)
+          raise UptrendsExtended::ApiError.new(response.parsed_response)
+      end
+    end
+
+    # @param [yyyy/mm/dd] start_of_period
+    # @param [yyyy/mm/dd] end_of_period
+    # @param [Day, Week, Month, Year, ProbeGroup, Probe, Checkpoint, ErrorCode, ErrorLevel] dimension
+    def statistics(start_of_period, end_of_period, dimension)
+      response = @client.class.get("#{api_url}/#{@guid}/statistics?Start=#{start_of_period}&End=#{end_of_period}&Dimension=#{dimension}", body: gen_request_body)
+      self.class.check_error!(response)
+    end
+
+    def uptime_this_year
+      stats = statistics("#{Time.now.year}/01/01", "#{Time.now.year}/12/31", 'Year')
+      if stats.blank?
+        {sla: 0, uptime: 0} # We return this because the probe has not been tested yet.
+      else
+        {sla: stats[0]['SLAPercentage'], uptime: stats[0]['PercentageUptime']}
+      end
+    end
+
+    def uptime_last_12_months
+      start_period = Time.now - 12.months
+      stats = statistics(start_period.strftime('%Y/%m/%d'), Time.now.strftime('%Y/%m/%d'), 'Year')
+      if stats.blank?
+        {sla: 0, uptime: 0} # We return this because the probe has not been tested yet.
+      else
+        {sla: stats[0]['SLAPercentage'], uptime: stats[0]['PercentageUptime']}
       end
     end
 
@@ -68,7 +95,7 @@ module Uptrends
 
         k = k.to_s.underscore
         case k
-        when "guid"
+        when 'guid'
           # setup attr_reader for guid and set it's value.
           self.class.send(:attr_reader, k)
           self.instance_variable_set("@#{k}", v)

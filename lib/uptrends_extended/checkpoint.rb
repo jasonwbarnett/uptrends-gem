@@ -1,6 +1,6 @@
-require 'uptrends/base'
+require 'uptrends_extended/base'
 
-module Uptrends
+module UptrendsExtended
   class Checkpoint < Base
 
     def initialize(client, response, attributes = {})
@@ -14,7 +14,7 @@ module Uptrends
 
     private
     def api_url
-      "/checkpointservers"
+      '/checkpointservers'
     end
 
     def gen_and_set_accessors

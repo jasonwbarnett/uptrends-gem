@@ -1,12 +1,12 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
-require_relative '../lib/uptrends'
-require_relative '../lib/uptrends/api_error'
-require_relative '../lib/uptrends/base'
-require_relative '../lib/uptrends/checkpoint'
-require_relative '../lib/uptrends/client'
-require_relative '../lib/uptrends/probe'
-require_relative '../lib/uptrends/probe_group'
+# require "codeclimate-test-reporter"
+# CodeClimate::TestReporter.start
+require_relative '../lib/uptrends_extended'
+require_relative '../lib/uptrends_extended/api_error'
+require_relative '../lib/uptrends_extended/base'
+require_relative '../lib/uptrends_extended/checkpoint'
+require_relative '../lib/uptrends_extended/client'
+require_relative '../lib/uptrends_extended/probe'
+require_relative '../lib/uptrends_extended/probe_group'
 require 'minitest/autorun'
 require 'minitest/pride'
 require 'webmock/minitest'
